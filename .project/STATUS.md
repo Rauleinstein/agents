@@ -4,7 +4,7 @@
 - **State:** active
 - **Priority:** P2
 - **Purpose:** reviewed central artifacts with explicit, safe deployment to Hermes, Claude Code, Codex and Cursor.
-- **GitHub target:** https://github.com/Rauleinstein/agents (private publication; verify remote and CI at delivery).
+- **GitHub repository:** https://github.com/Rauleinstein/agents (private; repository visibility and remote `main` verified).
 - **Next action:** approve one consumer environment and validate skill discovery; initialize `.specify/` in any project that will use Spec Kit.
 
 ## Delivered implementation
