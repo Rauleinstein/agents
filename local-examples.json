@@ -1,0 +1,76 @@
+[
+  {
+    "id": "verify-before-reporting",
+    "kind": "skill",
+    "name": "verify-before-reporting",
+    "path": "skills/verify-before-reporting",
+    "harnesses": [
+      "hermes",
+      "claude",
+      "codex",
+      "cursor"
+    ],
+    "provenance": {
+      "source": "original",
+      "revision": "v1",
+      "license": "All rights reserved",
+      "reviewed": true,
+      "maturity": "optional",
+      "review_scope": "Original example instruction and staging review; not a security audit"
+    }
+  },
+  {
+    "id": "claude-reviewer",
+    "kind": "agent",
+    "name": "reviewer.md",
+    "path": "agents/claude/reviewer.md",
+    "harnesses": [
+      "claude"
+    ],
+    "provenance": {
+      "source": "original",
+      "revision": "v1",
+      "license": "All rights reserved",
+      "reviewed": true,
+      "maturity": "optional",
+      "review_scope": "Original example instruction and staging review; not a security audit"
+    }
+  },
+  {
+    "id": "cursor-reviewer",
+    "kind": "agent",
+    "name": "reviewer.md",
+    "path": "agents/cursor/reviewer.md",
+    "harnesses": [
+      "cursor"
+    ],
+    "provenance": {
+      "source": "original",
+      "revision": "v1",
+      "license": "All rights reserved",
+      "reviewed": true,
+      "maturity": "optional",
+      "review_scope": "Original example instruction and staging review; not a security audit"
+    }
+  },
+  {
+    "id": "example-bundle",
+    "kind": "plugin",
+    "name": "example-bundle",
+    "path": "plugins/example-bundle",
+    "harnesses": [
+      "hermes",
+      "claude",
+      "codex",
+      "cursor"
+    ],
+    "provenance": {
+      "source": "original",
+      "revision": "v1",
+      "license": "All rights reserved",
+      "reviewed": true,
+      "maturity": "optional",
+      "review_scope": "Original example instruction and staging review; not a security audit"
+    }
+  }
+]

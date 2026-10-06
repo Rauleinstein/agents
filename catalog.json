@@ -1,0 +1,1286 @@
+{
+  "version": 1,
+  "items": [
+    {
+      "id": "mattpocock-ask-matt",
+      "kind": "skill",
+      "name": "ask-matt",
+      "path": "vendor/mattpocock-skills/skills/engineering/ask-matt",
+      "harnesses": [
+        "hermes",
+        "claude",
+        "codex",
+        "cursor"
+      ],
+      "provenance": {
+        "source": "https://github.com/mattpocock/skills",
+        "revision": "4588b32ecab9ecc9fc8cc6b6c5e7d675b6004b0d",
+        "version": "1.3.1",
+        "license": "MIT",
+        "reviewed": true,
+        "original_path": "skills/engineering/ask-matt/SKILL.md",
+        "maturity": "stable",
+        "review_scope": "Static instruction/resource inventory, dependency and packaging inspection; not a security audit",
+        "packaging_additions": [
+          "LICENSE"
+        ]
+      }
+    },
+    {
+      "id": "mattpocock-code-review",
+      "kind": "skill",
+      "name": "code-review",
+      "path": "vendor/mattpocock-skills/skills/engineering/code-review",
+      "harnesses": [
+        "hermes",
+        "claude",
+        "codex",
+        "cursor"
+      ],
+      "provenance": {
+        "source": "https://github.com/mattpocock/skills",
+        "revision": "4588b32ecab9ecc9fc8cc6b6c5e7d675b6004b0d",
+        "version": "1.3.1",
+        "license": "MIT",
+        "reviewed": true,
+        "original_path": "skills/engineering/code-review/SKILL.md",
+        "maturity": "stable",
+        "review_scope": "Static instruction/resource inventory, dependency and packaging inspection; not a security audit",
+        "packaging_additions": [
+          "LICENSE"
+        ]
+      }
+    },
+    {
+      "id": "mattpocock-codebase-design",
+      "kind": "skill",
+      "name": "codebase-design",
+      "path": "vendor/mattpocock-skills/skills/engineering/codebase-design",
+      "harnesses": [
+        "hermes",
+        "claude",
+        "codex",
+        "cursor"
+      ],
+      "provenance": {
+        "source": "https://github.com/mattpocock/skills",
+        "revision": "4588b32ecab9ecc9fc8cc6b6c5e7d675b6004b0d",
+        "version": "1.3.1",
+        "license": "MIT",
+        "reviewed": true,
+        "original_path": "skills/engineering/codebase-design/SKILL.md",
+        "maturity": "stable",
+        "review_scope": "Static instruction/resource inventory, dependency and packaging inspection; not a security audit",
+        "packaging_additions": [
+          "LICENSE"
+        ]
+      }
+    },
+    {
+      "id": "mattpocock-diagnosing-bugs",
+      "kind": "skill",
+      "name": "diagnosing-bugs",
+      "path": "vendor/mattpocock-skills/skills/engineering/diagnosing-bugs",
+      "harnesses": [
+        "hermes",
+        "claude",
+        "codex",
+        "cursor"
+      ],
+      "provenance": {
+        "source": "https://github.com/mattpocock/skills",
+        "revision": "4588b32ecab9ecc9fc8cc6b6c5e7d675b6004b0d",
+        "version": "1.3.1",
+        "license": "MIT",
+        "reviewed": true,
+        "original_path": "skills/engineering/diagnosing-bugs/SKILL.md",
+        "maturity": "stable",
+        "review_scope": "Static instruction/resource inventory, dependency and packaging inspection; not a security audit",
+        "packaging_additions": [
+          "LICENSE"
+        ]
+      }
+    },
+    {
+      "id": "mattpocock-domain-modeling",
+      "kind": "skill",
+      "name": "domain-modeling",
+      "path": "vendor/mattpocock-skills/skills/engineering/domain-modeling",
+      "harnesses": [
+        "hermes",
+        "claude",
+        "codex",
+        "cursor"
+      ],
+      "provenance": {
+        "source": "https://github.com/mattpocock/skills",
+        "revision": "4588b32ecab9ecc9fc8cc6b6c5e7d675b6004b0d",
+        "version": "1.3.1",
+        "license": "MIT",
+        "reviewed": true,
+        "original_path": "skills/engineering/domain-modeling/SKILL.md",
+        "maturity": "stable",
+        "review_scope": "Static instruction/resource inventory, dependency and packaging inspection; not a security audit",
+        "packaging_additions": [
+          "LICENSE"
+        ]
+      }
+    },
+    {
+      "id": "mattpocock-grill-with-docs",
+      "kind": "skill",
+      "name": "grill-with-docs",
+      "path": "vendor/mattpocock-skills/skills/engineering/grill-with-docs",
+      "harnesses": [
+        "hermes",
+        "claude",
+        "codex",
+        "cursor"
+      ],
+      "provenance": {
+        "source": "https://github.com/mattpocock/skills",
+        "revision": "4588b32ecab9ecc9fc8cc6b6c5e7d675b6004b0d",
+        "version": "1.3.1",
+        "license": "MIT",
+        "reviewed": true,
+        "original_path": "skills/engineering/grill-with-docs/SKILL.md",
+        "maturity": "stable",
+        "review_scope": "Static instruction/resource inventory, dependency and packaging inspection; not a security audit",
+        "packaging_additions": [
+          "LICENSE"
+        ]
+      }
+    },
+    {
+      "id": "mattpocock-implement",
+      "kind": "skill",
+      "name": "implement",
+      "path": "vendor/mattpocock-skills/skills/engineering/implement",
+      "harnesses": [
+        "hermes",
+        "claude",
+        "codex",
+        "cursor"
+      ],
+      "provenance": {
+        "source": "https://github.com/mattpocock/skills",
+        "revision": "4588b32ecab9ecc9fc8cc6b6c5e7d675b6004b0d",
+        "version": "1.3.1",
+        "license": "MIT",
+        "reviewed": true,
+        "original_path": "skills/engineering/implement/SKILL.md",
+        "maturity": "stable",
+        "review_scope": "Static instruction/resource inventory, dependency and packaging inspection; not a security audit",
+        "packaging_additions": [
+          "LICENSE"
+        ]
+      }
+    },
+    {
+      "id": "mattpocock-implement-spec",
+      "kind": "skill",
+      "name": "implement-spec",
+      "path": "vendor/mattpocock-skills/skills/engineering/implement-spec",
+      "harnesses": [
+        "hermes",
+        "claude",
+        "codex",
+        "cursor"
+      ],
+      "provenance": {
+        "source": "https://github.com/mattpocock/skills",
+        "revision": "4588b32ecab9ecc9fc8cc6b6c5e7d675b6004b0d",
+        "version": "1.3.1",
+        "license": "MIT",
+        "reviewed": true,
+        "original_path": "skills/engineering/implement-spec/SKILL.md",
+        "maturity": "stable",
+        "review_scope": "Static instruction/resource inventory, dependency and packaging inspection; not a security audit",
+        "packaging_additions": [
+          "LICENSE"
+        ]
+      }
+    },
+    {
+      "id": "mattpocock-improve-codebase-architecture",
+      "kind": "skill",
+      "name": "improve-codebase-architecture",
+      "path": "vendor/mattpocock-skills/skills/engineering/improve-codebase-architecture",
+      "harnesses": [
+        "hermes",
+        "claude",
+        "codex",
+        "cursor"
+      ],
+      "provenance": {
+        "source": "https://github.com/mattpocock/skills",
+        "revision": "4588b32ecab9ecc9fc8cc6b6c5e7d675b6004b0d",
+        "version": "1.3.1",
+        "license": "MIT",
+        "reviewed": true,
+        "original_path": "skills/engineering/improve-codebase-architecture/SKILL.md",
+        "maturity": "stable",
+        "review_scope": "Static instruction/resource inventory, dependency and packaging inspection; not a security audit",
+        "packaging_additions": [
+          "LICENSE"
+        ]
+      }
+    },
+    {
+      "id": "mattpocock-pr",
+      "kind": "skill",
+      "name": "pr",
+      "path": "vendor/mattpocock-skills/skills/engineering/pr",
+      "harnesses": [
+        "hermes",
+        "claude",
+        "codex",
+        "cursor"
+      ],
+      "provenance": {
+        "source": "https://github.com/mattpocock/skills",
+        "revision": "4588b32ecab9ecc9fc8cc6b6c5e7d675b6004b0d",
+        "version": "1.3.1",
+        "license": "MIT",
+        "reviewed": true,
+        "original_path": "skills/engineering/pr/SKILL.md",
+        "maturity": "stable",
+        "review_scope": "Static instruction/resource inventory, dependency and packaging inspection; not a security audit",
+        "packaging_additions": [
+          "LICENSE"
+        ]
+      }
+    },
+    {
+      "id": "mattpocock-prototype",
+      "kind": "skill",
+      "name": "prototype",
+      "path": "vendor/mattpocock-skills/skills/engineering/prototype",
+      "harnesses": [
+        "hermes",
+        "claude",
+        "codex",
+        "cursor"
+      ],
+      "provenance": {
+        "source": "https://github.com/mattpocock/skills",
+        "revision": "4588b32ecab9ecc9fc8cc6b6c5e7d675b6004b0d",
+        "version": "1.3.1",
+        "license": "MIT",
+        "reviewed": true,
+        "original_path": "skills/engineering/prototype/SKILL.md",
+        "maturity": "stable",
+        "review_scope": "Static instruction/resource inventory, dependency and packaging inspection; not a security audit",
+        "packaging_additions": [
+          "LICENSE"
+        ]
+      }
+    },
+    {
+      "id": "mattpocock-research",
+      "kind": "skill",
+      "name": "research",
+      "path": "vendor/mattpocock-skills/skills/engineering/research",
+      "harnesses": [
+        "hermes",
+        "claude",
+        "codex",
+        "cursor"
+      ],
+      "provenance": {
+        "source": "https://github.com/mattpocock/skills",
+        "revision": "4588b32ecab9ecc9fc8cc6b6c5e7d675b6004b0d",
+        "version": "1.3.1",
+        "license": "MIT",
+        "reviewed": true,
+        "original_path": "skills/engineering/research/SKILL.md",
+        "maturity": "stable",
+        "review_scope": "Static instruction/resource inventory, dependency and packaging inspection; not a security audit",
+        "packaging_additions": [
+          "LICENSE"
+        ]
+      }
+    },
+    {
+      "id": "mattpocock-retro",
+      "kind": "skill",
+      "name": "retro",
+      "path": "vendor/mattpocock-skills/skills/engineering/retro",
+      "harnesses": [
+        "hermes",
+        "claude",
+        "codex",
+        "cursor"
+      ],
+      "provenance": {
+        "source": "https://github.com/mattpocock/skills",
+        "revision": "4588b32ecab9ecc9fc8cc6b6c5e7d675b6004b0d",
+        "version": "1.3.1",
+        "license": "MIT",
+        "reviewed": true,
+        "original_path": "skills/engineering/retro/SKILL.md",
+        "maturity": "stable",
+        "review_scope": "Static instruction/resource inventory, dependency and packaging inspection; not a security audit",
+        "packaging_additions": [
+          "LICENSE"
+        ]
+      }
+    },
+    {
+      "id": "mattpocock-setup-matt-pocock-skills",
+      "kind": "skill",
+      "name": "setup-matt-pocock-skills",
+      "path": "vendor/mattpocock-skills/skills/engineering/setup-matt-pocock-skills",
+      "harnesses": [
+        "hermes",
+        "claude",
+        "codex",
+        "cursor"
+      ],
+      "provenance": {
+        "source": "https://github.com/mattpocock/skills",
+        "revision": "4588b32ecab9ecc9fc8cc6b6c5e7d675b6004b0d",
+        "version": "1.3.1",
+        "license": "MIT",
+        "reviewed": true,
+        "original_path": "skills/engineering/setup-matt-pocock-skills/SKILL.md",
+        "maturity": "stable",
+        "review_scope": "Static instruction/resource inventory, dependency and packaging inspection; not a security audit",
+        "packaging_additions": [
+          "LICENSE"
+        ]
+      }
+    },
+    {
+      "id": "mattpocock-tdd",
+      "kind": "skill",
+      "name": "tdd",
+      "path": "vendor/mattpocock-skills/skills/engineering/tdd",
+      "harnesses": [
+        "hermes",
+        "claude",
+        "codex",
+        "cursor"
+      ],
+      "provenance": {
+        "source": "https://github.com/mattpocock/skills",
+        "revision": "4588b32ecab9ecc9fc8cc6b6c5e7d675b6004b0d",
+        "version": "1.3.1",
+        "license": "MIT",
+        "reviewed": true,
+        "original_path": "skills/engineering/tdd/SKILL.md",
+        "maturity": "stable",
+        "review_scope": "Static instruction/resource inventory, dependency and packaging inspection; not a security audit",
+        "packaging_additions": [
+          "LICENSE"
+        ]
+      }
+    },
+    {
+      "id": "mattpocock-to-spec",
+      "kind": "skill",
+      "name": "to-spec",
+      "path": "vendor/mattpocock-skills/skills/engineering/to-spec",
+      "harnesses": [
+        "hermes",
+        "claude",
+        "codex",
+        "cursor"
+      ],
+      "provenance": {
+        "source": "https://github.com/mattpocock/skills",
+        "revision": "4588b32ecab9ecc9fc8cc6b6c5e7d675b6004b0d",
+        "version": "1.3.1",
+        "license": "MIT",
+        "reviewed": true,
+        "original_path": "skills/engineering/to-spec/SKILL.md",
+        "maturity": "stable",
+        "review_scope": "Static instruction/resource inventory, dependency and packaging inspection; not a security audit",
+        "packaging_additions": [
+          "LICENSE"
+        ]
+      }
+    },
+    {
+      "id": "mattpocock-to-tickets",
+      "kind": "skill",
+      "name": "to-tickets",
+      "path": "vendor/mattpocock-skills/skills/engineering/to-tickets",
+      "harnesses": [
+        "hermes",
+        "claude",
+        "codex",
+        "cursor"
+      ],
+      "provenance": {
+        "source": "https://github.com/mattpocock/skills",
+        "revision": "4588b32ecab9ecc9fc8cc6b6c5e7d675b6004b0d",
+        "version": "1.3.1",
+        "license": "MIT",
+        "reviewed": true,
+        "original_path": "skills/engineering/to-tickets/SKILL.md",
+        "maturity": "stable",
+        "review_scope": "Static instruction/resource inventory, dependency and packaging inspection; not a security audit",
+        "packaging_additions": [
+          "LICENSE"
+        ]
+      }
+    },
+    {
+      "id": "mattpocock-triage",
+      "kind": "skill",
+      "name": "triage",
+      "path": "vendor/mattpocock-skills/skills/engineering/triage",
+      "harnesses": [
+        "hermes",
+        "claude",
+        "codex",
+        "cursor"
+      ],
+      "provenance": {
+        "source": "https://github.com/mattpocock/skills",
+        "revision": "4588b32ecab9ecc9fc8cc6b6c5e7d675b6004b0d",
+        "version": "1.3.1",
+        "license": "MIT",
+        "reviewed": true,
+        "original_path": "skills/engineering/triage/SKILL.md",
+        "maturity": "stable",
+        "review_scope": "Static instruction/resource inventory, dependency and packaging inspection; not a security audit",
+        "packaging_additions": [
+          "LICENSE"
+        ]
+      }
+    },
+    {
+      "id": "mattpocock-wayfinder",
+      "kind": "skill",
+      "name": "wayfinder",
+      "path": "vendor/mattpocock-skills/skills/engineering/wayfinder",
+      "harnesses": [
+        "hermes",
+        "claude",
+        "codex",
+        "cursor"
+      ],
+      "provenance": {
+        "source": "https://github.com/mattpocock/skills",
+        "revision": "4588b32ecab9ecc9fc8cc6b6c5e7d675b6004b0d",
+        "version": "1.3.1",
+        "license": "MIT",
+        "reviewed": true,
+        "original_path": "skills/engineering/wayfinder/SKILL.md",
+        "maturity": "stable",
+        "review_scope": "Static instruction/resource inventory, dependency and packaging inspection; not a security audit",
+        "packaging_additions": [
+          "LICENSE"
+        ]
+      }
+    },
+    {
+      "id": "mattpocock-wizard",
+      "kind": "skill",
+      "name": "wizard",
+      "path": "vendor/mattpocock-skills/skills/engineering/wizard",
+      "harnesses": [
+        "hermes",
+        "claude",
+        "codex",
+        "cursor"
+      ],
+      "provenance": {
+        "source": "https://github.com/mattpocock/skills",
+        "revision": "4588b32ecab9ecc9fc8cc6b6c5e7d675b6004b0d",
+        "version": "1.3.1",
+        "license": "MIT",
+        "reviewed": true,
+        "original_path": "skills/engineering/wizard/SKILL.md",
+        "maturity": "stable",
+        "review_scope": "Static instruction/resource inventory, dependency and packaging inspection; not a security audit",
+        "packaging_additions": [
+          "LICENSE"
+        ]
+      }
+    },
+    {
+      "id": "mattpocock-chief-of-staff",
+      "kind": "skill",
+      "name": "chief-of-staff",
+      "path": "vendor/mattpocock-skills/skills/in-progress/chief-of-staff",
+      "harnesses": [
+        "hermes",
+        "claude",
+        "codex",
+        "cursor"
+      ],
+      "provenance": {
+        "source": "https://github.com/mattpocock/skills",
+        "revision": "4588b32ecab9ecc9fc8cc6b6c5e7d675b6004b0d",
+        "version": "1.3.1",
+        "license": "MIT",
+        "reviewed": true,
+        "original_path": "skills/in-progress/chief-of-staff/SKILL.md",
+        "maturity": "experimental",
+        "review_scope": "Static instruction/resource inventory, dependency and packaging inspection; not a security audit",
+        "packaging_additions": [
+          "LICENSE"
+        ]
+      }
+    },
+    {
+      "id": "mattpocock-claude-handoff",
+      "kind": "skill",
+      "name": "claude-handoff",
+      "path": "vendor/mattpocock-skills/skills/in-progress/claude-handoff",
+      "harnesses": [
+        "hermes",
+        "claude",
+        "codex",
+        "cursor"
+      ],
+      "provenance": {
+        "source": "https://github.com/mattpocock/skills",
+        "revision": "4588b32ecab9ecc9fc8cc6b6c5e7d675b6004b0d",
+        "version": "1.3.1",
+        "license": "MIT",
+        "reviewed": true,
+        "original_path": "skills/in-progress/claude-handoff/SKILL.md",
+        "maturity": "experimental",
+        "review_scope": "Static instruction/resource inventory, dependency and packaging inspection; not a security audit",
+        "packaging_additions": [
+          "LICENSE"
+        ]
+      }
+    },
+    {
+      "id": "mattpocock-loop-me",
+      "kind": "skill",
+      "name": "loop-me",
+      "path": "vendor/mattpocock-skills/skills/in-progress/loop-me",
+      "harnesses": [
+        "hermes",
+        "claude",
+        "codex",
+        "cursor"
+      ],
+      "provenance": {
+        "source": "https://github.com/mattpocock/skills",
+        "revision": "4588b32ecab9ecc9fc8cc6b6c5e7d675b6004b0d",
+        "version": "1.3.1",
+        "license": "MIT",
+        "reviewed": true,
+        "original_path": "skills/in-progress/loop-me/SKILL.md",
+        "maturity": "experimental",
+        "review_scope": "Static instruction/resource inventory, dependency and packaging inspection; not a security audit",
+        "packaging_additions": [
+          "LICENSE"
+        ]
+      }
+    },
+    {
+      "id": "mattpocock-setup-ts-deep-modules",
+      "kind": "skill",
+      "name": "setup-ts-deep-modules",
+      "path": "vendor/mattpocock-skills/skills/in-progress/setup-ts-deep-modules",
+      "harnesses": [
+        "hermes",
+        "claude",
+        "codex",
+        "cursor"
+      ],
+      "provenance": {
+        "source": "https://github.com/mattpocock/skills",
+        "revision": "4588b32ecab9ecc9fc8cc6b6c5e7d675b6004b0d",
+        "version": "1.3.1",
+        "license": "MIT",
+        "reviewed": true,
+        "original_path": "skills/in-progress/setup-ts-deep-modules/SKILL.md",
+        "maturity": "experimental",
+        "review_scope": "Static instruction/resource inventory, dependency and packaging inspection; not a security audit",
+        "packaging_additions": [
+          "LICENSE"
+        ]
+      }
+    },
+    {
+      "id": "mattpocock-writing-beats",
+      "kind": "skill",
+      "name": "writing-beats",
+      "path": "vendor/mattpocock-skills/skills/in-progress/writing-beats",
+      "harnesses": [
+        "hermes",
+        "claude",
+        "codex",
+        "cursor"
+      ],
+      "provenance": {
+        "source": "https://github.com/mattpocock/skills",
+        "revision": "4588b32ecab9ecc9fc8cc6b6c5e7d675b6004b0d",
+        "version": "1.3.1",
+        "license": "MIT",
+        "reviewed": true,
+        "original_path": "skills/in-progress/writing-beats/SKILL.md",
+        "maturity": "experimental",
+        "review_scope": "Static instruction/resource inventory, dependency and packaging inspection; not a security audit",
+        "packaging_additions": [
+          "LICENSE"
+        ]
+      }
+    },
+    {
+      "id": "mattpocock-writing-fragments",
+      "kind": "skill",
+      "name": "writing-fragments",
+      "path": "vendor/mattpocock-skills/skills/in-progress/writing-fragments",
+      "harnesses": [
+        "hermes",
+        "claude",
+        "codex",
+        "cursor"
+      ],
+      "provenance": {
+        "source": "https://github.com/mattpocock/skills",
+        "revision": "4588b32ecab9ecc9fc8cc6b6c5e7d675b6004b0d",
+        "version": "1.3.1",
+        "license": "MIT",
+        "reviewed": true,
+        "original_path": "skills/in-progress/writing-fragments/SKILL.md",
+        "maturity": "experimental",
+        "review_scope": "Static instruction/resource inventory, dependency and packaging inspection; not a security audit",
+        "packaging_additions": [
+          "LICENSE"
+        ]
+      }
+    },
+    {
+      "id": "mattpocock-writing-shape",
+      "kind": "skill",
+      "name": "writing-shape",
+      "path": "vendor/mattpocock-skills/skills/in-progress/writing-shape",
+      "harnesses": [
+        "hermes",
+        "claude",
+        "codex",
+        "cursor"
+      ],
+      "provenance": {
+        "source": "https://github.com/mattpocock/skills",
+        "revision": "4588b32ecab9ecc9fc8cc6b6c5e7d675b6004b0d",
+        "version": "1.3.1",
+        "license": "MIT",
+        "reviewed": true,
+        "original_path": "skills/in-progress/writing-shape/SKILL.md",
+        "maturity": "experimental",
+        "review_scope": "Static instruction/resource inventory, dependency and packaging inspection; not a security audit",
+        "packaging_additions": [
+          "LICENSE"
+        ]
+      }
+    },
+    {
+      "id": "mattpocock-git-guardrails-claude-code",
+      "kind": "skill",
+      "name": "git-guardrails-claude-code",
+      "path": "vendor/mattpocock-skills/skills/misc/git-guardrails-claude-code",
+      "harnesses": [
+        "claude"
+      ],
+      "provenance": {
+        "source": "https://github.com/mattpocock/skills",
+        "revision": "4588b32ecab9ecc9fc8cc6b6c5e7d675b6004b0d",
+        "version": "1.3.1",
+        "license": "MIT",
+        "reviewed": true,
+        "original_path": "skills/misc/git-guardrails-claude-code/SKILL.md",
+        "maturity": "optional",
+        "review_scope": "Static instruction/resource inventory, dependency and packaging inspection; not a security audit",
+        "packaging_additions": [
+          "LICENSE"
+        ]
+      }
+    },
+    {
+      "id": "mattpocock-migrate-to-shoehorn",
+      "kind": "skill",
+      "name": "migrate-to-shoehorn",
+      "path": "vendor/mattpocock-skills/skills/misc/migrate-to-shoehorn",
+      "harnesses": [
+        "hermes",
+        "claude",
+        "codex",
+        "cursor"
+      ],
+      "provenance": {
+        "source": "https://github.com/mattpocock/skills",
+        "revision": "4588b32ecab9ecc9fc8cc6b6c5e7d675b6004b0d",
+        "version": "1.3.1",
+        "license": "MIT",
+        "reviewed": true,
+        "original_path": "skills/misc/migrate-to-shoehorn/SKILL.md",
+        "maturity": "optional",
+        "review_scope": "Static instruction/resource inventory, dependency and packaging inspection; not a security audit",
+        "packaging_additions": [
+          "LICENSE"
+        ]
+      }
+    },
+    {
+      "id": "mattpocock-scaffold-exercises",
+      "kind": "skill",
+      "name": "scaffold-exercises",
+      "path": "vendor/mattpocock-skills/skills/misc/scaffold-exercises",
+      "harnesses": [
+        "hermes",
+        "claude",
+        "codex",
+        "cursor"
+      ],
+      "provenance": {
+        "source": "https://github.com/mattpocock/skills",
+        "revision": "4588b32ecab9ecc9fc8cc6b6c5e7d675b6004b0d",
+        "version": "1.3.1",
+        "license": "MIT",
+        "reviewed": true,
+        "original_path": "skills/misc/scaffold-exercises/SKILL.md",
+        "maturity": "optional",
+        "review_scope": "Static instruction/resource inventory, dependency and packaging inspection; not a security audit",
+        "packaging_additions": [
+          "LICENSE"
+        ]
+      }
+    },
+    {
+      "id": "mattpocock-setup-pre-commit",
+      "kind": "skill",
+      "name": "setup-pre-commit",
+      "path": "vendor/mattpocock-skills/skills/misc/setup-pre-commit",
+      "harnesses": [
+        "hermes",
+        "claude",
+        "codex",
+        "cursor"
+      ],
+      "provenance": {
+        "source": "https://github.com/mattpocock/skills",
+        "revision": "4588b32ecab9ecc9fc8cc6b6c5e7d675b6004b0d",
+        "version": "1.3.1",
+        "license": "MIT",
+        "reviewed": true,
+        "original_path": "skills/misc/setup-pre-commit/SKILL.md",
+        "maturity": "optional",
+        "review_scope": "Static instruction/resource inventory, dependency and packaging inspection; not a security audit",
+        "packaging_additions": [
+          "LICENSE"
+        ]
+      }
+    },
+    {
+      "id": "mattpocock-grill-me",
+      "kind": "skill",
+      "name": "grill-me",
+      "path": "vendor/mattpocock-skills/skills/productivity/grill-me",
+      "harnesses": [
+        "hermes",
+        "claude",
+        "codex",
+        "cursor"
+      ],
+      "provenance": {
+        "source": "https://github.com/mattpocock/skills",
+        "revision": "4588b32ecab9ecc9fc8cc6b6c5e7d675b6004b0d",
+        "version": "1.3.1",
+        "license": "MIT",
+        "reviewed": true,
+        "original_path": "skills/productivity/grill-me/SKILL.md",
+        "maturity": "stable",
+        "review_scope": "Static instruction/resource inventory, dependency and packaging inspection; not a security audit",
+        "packaging_additions": [
+          "LICENSE"
+        ]
+      }
+    },
+    {
+      "id": "mattpocock-grilling",
+      "kind": "skill",
+      "name": "grilling",
+      "path": "vendor/mattpocock-skills/skills/productivity/grilling",
+      "harnesses": [
+        "hermes",
+        "claude",
+        "codex",
+        "cursor"
+      ],
+      "provenance": {
+        "source": "https://github.com/mattpocock/skills",
+        "revision": "4588b32ecab9ecc9fc8cc6b6c5e7d675b6004b0d",
+        "version": "1.3.1",
+        "license": "MIT",
+        "reviewed": true,
+        "original_path": "skills/productivity/grilling/SKILL.md",
+        "maturity": "stable",
+        "review_scope": "Static instruction/resource inventory, dependency and packaging inspection; not a security audit",
+        "packaging_additions": [
+          "LICENSE"
+        ]
+      }
+    },
+    {
+      "id": "mattpocock-handoff",
+      "kind": "skill",
+      "name": "handoff",
+      "path": "vendor/mattpocock-skills/skills/productivity/handoff",
+      "harnesses": [
+        "hermes",
+        "claude",
+        "codex",
+        "cursor"
+      ],
+      "provenance": {
+        "source": "https://github.com/mattpocock/skills",
+        "revision": "4588b32ecab9ecc9fc8cc6b6c5e7d675b6004b0d",
+        "version": "1.3.1",
+        "license": "MIT",
+        "reviewed": true,
+        "original_path": "skills/productivity/handoff/SKILL.md",
+        "maturity": "stable",
+        "review_scope": "Static instruction/resource inventory, dependency and packaging inspection; not a security audit",
+        "packaging_additions": [
+          "LICENSE"
+        ]
+      }
+    },
+    {
+      "id": "mattpocock-teach",
+      "kind": "skill",
+      "name": "teach",
+      "path": "vendor/mattpocock-skills/skills/productivity/teach",
+      "harnesses": [
+        "hermes",
+        "claude",
+        "codex",
+        "cursor"
+      ],
+      "provenance": {
+        "source": "https://github.com/mattpocock/skills",
+        "revision": "4588b32ecab9ecc9fc8cc6b6c5e7d675b6004b0d",
+        "version": "1.3.1",
+        "license": "MIT",
+        "reviewed": true,
+        "original_path": "skills/productivity/teach/SKILL.md",
+        "maturity": "stable",
+        "review_scope": "Static instruction/resource inventory, dependency and packaging inspection; not a security audit",
+        "packaging_additions": [
+          "LICENSE"
+        ]
+      }
+    },
+    {
+      "id": "mattpocock-to-questionnaire",
+      "kind": "skill",
+      "name": "to-questionnaire",
+      "path": "vendor/mattpocock-skills/skills/productivity/to-questionnaire",
+      "harnesses": [
+        "hermes",
+        "claude",
+        "codex",
+        "cursor"
+      ],
+      "provenance": {
+        "source": "https://github.com/mattpocock/skills",
+        "revision": "4588b32ecab9ecc9fc8cc6b6c5e7d675b6004b0d",
+        "version": "1.3.1",
+        "license": "MIT",
+        "reviewed": true,
+        "original_path": "skills/productivity/to-questionnaire/SKILL.md",
+        "maturity": "stable",
+        "review_scope": "Static instruction/resource inventory, dependency and packaging inspection; not a security audit",
+        "packaging_additions": [
+          "LICENSE"
+        ]
+      }
+    },
+    {
+      "id": "mattpocock-wait-what",
+      "kind": "skill",
+      "name": "wait-what",
+      "path": "vendor/mattpocock-skills/skills/productivity/wait-what",
+      "harnesses": [
+        "hermes",
+        "claude",
+        "codex",
+        "cursor"
+      ],
+      "provenance": {
+        "source": "https://github.com/mattpocock/skills",
+        "revision": "4588b32ecab9ecc9fc8cc6b6c5e7d675b6004b0d",
+        "version": "1.3.1",
+        "license": "MIT",
+        "reviewed": true,
+        "original_path": "skills/productivity/wait-what/SKILL.md",
+        "maturity": "stable",
+        "review_scope": "Static instruction/resource inventory, dependency and packaging inspection; not a security audit",
+        "packaging_additions": [
+          "LICENSE"
+        ]
+      }
+    },
+    {
+      "id": "mattpocock-writing-for-agents",
+      "kind": "skill",
+      "name": "writing-for-agents",
+      "path": "vendor/mattpocock-skills/skills/productivity/writing-for-agents",
+      "harnesses": [
+        "hermes",
+        "claude",
+        "codex",
+        "cursor"
+      ],
+      "provenance": {
+        "source": "https://github.com/mattpocock/skills",
+        "revision": "4588b32ecab9ecc9fc8cc6b6c5e7d675b6004b0d",
+        "version": "1.3.1",
+        "license": "MIT",
+        "reviewed": true,
+        "original_path": "skills/productivity/writing-for-agents/SKILL.md",
+        "maturity": "stable",
+        "review_scope": "Static instruction/resource inventory, dependency and packaging inspection; not a security audit",
+        "packaging_additions": [
+          "LICENSE"
+        ]
+      }
+    },
+    {
+      "id": "speckit-analyze",
+      "kind": "skill",
+      "name": "speckit-analyze",
+      "path": "generated/github-spec-kit/generic/speckit-analyze",
+      "harnesses": [
+        "hermes",
+        "claude",
+        "codex",
+        "cursor"
+      ],
+      "provenance": {
+        "source": "https://github.com/github/spec-kit",
+        "revision": "2dda047809dd17fa56200408ce0228a2cfe08be7",
+        "version": "1.1.1.dev0",
+        "license": "MIT",
+        "reviewed": true,
+        "original_path": "templates/commands/analyze.md",
+        "maturity": "stable",
+        "generator": "Official specify init generic --skills --script sh",
+        "review_scope": "Static generator, generated instruction, dependency closure and packaging inspection; not a security audit",
+        "packaging_additions": [
+          "LICENSE"
+        ]
+      }
+    },
+    {
+      "id": "speckit-checklist",
+      "kind": "skill",
+      "name": "speckit-checklist",
+      "path": "generated/github-spec-kit/generic/speckit-checklist",
+      "harnesses": [
+        "hermes",
+        "claude",
+        "codex",
+        "cursor"
+      ],
+      "provenance": {
+        "source": "https://github.com/github/spec-kit",
+        "revision": "2dda047809dd17fa56200408ce0228a2cfe08be7",
+        "version": "1.1.1.dev0",
+        "license": "MIT",
+        "reviewed": true,
+        "original_path": "templates/commands/checklist.md",
+        "maturity": "stable",
+        "generator": "Official specify init generic --skills --script sh",
+        "review_scope": "Static generator, generated instruction, dependency closure and packaging inspection; not a security audit",
+        "packaging_additions": [
+          "LICENSE"
+        ]
+      }
+    },
+    {
+      "id": "speckit-clarify",
+      "kind": "skill",
+      "name": "speckit-clarify",
+      "path": "generated/github-spec-kit/generic/speckit-clarify",
+      "harnesses": [
+        "hermes",
+        "claude",
+        "codex",
+        "cursor"
+      ],
+      "provenance": {
+        "source": "https://github.com/github/spec-kit",
+        "revision": "2dda047809dd17fa56200408ce0228a2cfe08be7",
+        "version": "1.1.1.dev0",
+        "license": "MIT",
+        "reviewed": true,
+        "original_path": "templates/commands/clarify.md",
+        "maturity": "stable",
+        "generator": "Official specify init generic --skills --script sh",
+        "review_scope": "Static generator, generated instruction, dependency closure and packaging inspection; not a security audit",
+        "packaging_additions": [
+          "LICENSE"
+        ]
+      }
+    },
+    {
+      "id": "speckit-constitution",
+      "kind": "skill",
+      "name": "speckit-constitution",
+      "path": "generated/github-spec-kit/generic/speckit-constitution",
+      "harnesses": [
+        "hermes",
+        "claude",
+        "codex",
+        "cursor"
+      ],
+      "provenance": {
+        "source": "https://github.com/github/spec-kit",
+        "revision": "2dda047809dd17fa56200408ce0228a2cfe08be7",
+        "version": "1.1.1.dev0",
+        "license": "MIT",
+        "reviewed": true,
+        "original_path": "templates/commands/constitution.md",
+        "maturity": "stable",
+        "generator": "Official specify init generic --skills --script sh",
+        "review_scope": "Static generator, generated instruction, dependency closure and packaging inspection; not a security audit",
+        "packaging_additions": [
+          "LICENSE"
+        ]
+      }
+    },
+    {
+      "id": "speckit-converge",
+      "kind": "skill",
+      "name": "speckit-converge",
+      "path": "generated/github-spec-kit/generic/speckit-converge",
+      "harnesses": [
+        "hermes",
+        "claude",
+        "codex",
+        "cursor"
+      ],
+      "provenance": {
+        "source": "https://github.com/github/spec-kit",
+        "revision": "2dda047809dd17fa56200408ce0228a2cfe08be7",
+        "version": "1.1.1.dev0",
+        "license": "MIT",
+        "reviewed": true,
+        "original_path": "templates/commands/converge.md",
+        "maturity": "stable",
+        "generator": "Official specify init generic --skills --script sh",
+        "review_scope": "Static generator, generated instruction, dependency closure and packaging inspection; not a security audit",
+        "packaging_additions": [
+          "LICENSE"
+        ]
+      }
+    },
+    {
+      "id": "speckit-implement",
+      "kind": "skill",
+      "name": "speckit-implement",
+      "path": "generated/github-spec-kit/generic/speckit-implement",
+      "harnesses": [
+        "hermes",
+        "claude",
+        "codex",
+        "cursor"
+      ],
+      "provenance": {
+        "source": "https://github.com/github/spec-kit",
+        "revision": "2dda047809dd17fa56200408ce0228a2cfe08be7",
+        "version": "1.1.1.dev0",
+        "license": "MIT",
+        "reviewed": true,
+        "original_path": "templates/commands/implement.md",
+        "maturity": "stable",
+        "generator": "Official specify init generic --skills --script sh",
+        "review_scope": "Static generator, generated instruction, dependency closure and packaging inspection; not a security audit",
+        "packaging_additions": [
+          "LICENSE"
+        ]
+      }
+    },
+    {
+      "id": "speckit-plan",
+      "kind": "skill",
+      "name": "speckit-plan",
+      "path": "generated/github-spec-kit/generic/speckit-plan",
+      "harnesses": [
+        "hermes",
+        "claude",
+        "codex",
+        "cursor"
+      ],
+      "provenance": {
+        "source": "https://github.com/github/spec-kit",
+        "revision": "2dda047809dd17fa56200408ce0228a2cfe08be7",
+        "version": "1.1.1.dev0",
+        "license": "MIT",
+        "reviewed": true,
+        "original_path": "templates/commands/plan.md",
+        "maturity": "stable",
+        "generator": "Official specify init generic --skills --script sh",
+        "review_scope": "Static generator, generated instruction, dependency closure and packaging inspection; not a security audit",
+        "packaging_additions": [
+          "LICENSE"
+        ]
+      }
+    },
+    {
+      "id": "speckit-specify",
+      "kind": "skill",
+      "name": "speckit-specify",
+      "path": "generated/github-spec-kit/generic/speckit-specify",
+      "harnesses": [
+        "hermes",
+        "claude",
+        "codex",
+        "cursor"
+      ],
+      "provenance": {
+        "source": "https://github.com/github/spec-kit",
+        "revision": "2dda047809dd17fa56200408ce0228a2cfe08be7",
+        "version": "1.1.1.dev0",
+        "license": "MIT",
+        "reviewed": true,
+        "original_path": "templates/commands/specify.md",
+        "maturity": "stable",
+        "generator": "Official specify init generic --skills --script sh",
+        "review_scope": "Static generator, generated instruction, dependency closure and packaging inspection; not a security audit",
+        "packaging_additions": [
+          "LICENSE"
+        ]
+      }
+    },
+    {
+      "id": "speckit-tasks",
+      "kind": "skill",
+      "name": "speckit-tasks",
+      "path": "generated/github-spec-kit/generic/speckit-tasks",
+      "harnesses": [
+        "hermes",
+        "claude",
+        "codex",
+        "cursor"
+      ],
+      "provenance": {
+        "source": "https://github.com/github/spec-kit",
+        "revision": "2dda047809dd17fa56200408ce0228a2cfe08be7",
+        "version": "1.1.1.dev0",
+        "license": "MIT",
+        "reviewed": true,
+        "original_path": "templates/commands/tasks.md",
+        "maturity": "stable",
+        "generator": "Official specify init generic --skills --script sh",
+        "review_scope": "Static generator, generated instruction, dependency closure and packaging inspection; not a security audit",
+        "packaging_additions": [
+          "LICENSE"
+        ]
+      }
+    },
+    {
+      "id": "speckit-taskstoissues",
+      "kind": "skill",
+      "name": "speckit-taskstoissues",
+      "path": "generated/github-spec-kit/generic/speckit-taskstoissues",
+      "harnesses": [
+        "hermes",
+        "claude",
+        "codex",
+        "cursor"
+      ],
+      "provenance": {
+        "source": "https://github.com/github/spec-kit",
+        "revision": "2dda047809dd17fa56200408ce0228a2cfe08be7",
+        "version": "1.1.1.dev0",
+        "license": "MIT",
+        "reviewed": true,
+        "original_path": "templates/commands/taskstoissues.md",
+        "maturity": "stable",
+        "generator": "Official specify init generic --skills --script sh",
+        "review_scope": "Static generator, generated instruction, dependency closure and packaging inspection; not a security audit",
+        "packaging_additions": [
+          "LICENSE"
+        ]
+      }
+    },
+    {
+      "id": "verify-before-reporting",
+      "kind": "skill",
+      "name": "verify-before-reporting",
+      "path": "skills/verify-before-reporting",
+      "harnesses": [
+        "hermes",
+        "claude",
+        "codex",
+        "cursor"
+      ],
+      "provenance": {
+        "source": "original",
+        "revision": "v1",
+        "license": "All rights reserved",
+        "reviewed": true,
+        "maturity": "optional",
+        "review_scope": "Original example instruction and staging review; not a security audit"
+      }
+    },
+    {
+      "id": "claude-reviewer",
+      "kind": "agent",
+      "name": "reviewer.md",
+      "path": "agents/claude/reviewer.md",
+      "harnesses": [
+        "claude"
+      ],
+      "provenance": {
+        "source": "original",
+        "revision": "v1",
+        "license": "All rights reserved",
+        "reviewed": true,
+        "maturity": "optional",
+        "review_scope": "Original example instruction and staging review; not a security audit"
+      }
+    },
+    {
+      "id": "cursor-reviewer",
+      "kind": "agent",
+      "name": "reviewer.md",
+      "path": "agents/cursor/reviewer.md",
+      "harnesses": [
+        "cursor"
+      ],
+      "provenance": {
+        "source": "original",
+        "revision": "v1",
+        "license": "All rights reserved",
+        "reviewed": true,
+        "maturity": "optional",
+        "review_scope": "Original example instruction and staging review; not a security audit"
+      }
+    },
+    {
+      "id": "example-bundle",
+      "kind": "plugin",
+      "name": "example-bundle",
+      "path": "plugins/example-bundle",
+      "harnesses": [
+        "hermes",
+        "claude",
+        "codex",
+        "cursor"
+      ],
+      "provenance": {
+        "source": "original",
+        "revision": "v1",
+        "license": "All rights reserved",
+        "reviewed": true,
+        "maturity": "optional",
+        "review_scope": "Original example instruction and staging review; not a security audit"
+      }
+    }
+  ]
+}
