@@ -405,6 +405,37 @@ class SyncTests(unittest.TestCase):
         self.assertEqual(script.read_bytes(), (self.target / 'sample' / 'install.sh').read_bytes())
         self.assertFalse(sentinel.exists())
 
+    def test_unused_declared_target_symlink_is_rejected(self):
+        other = self.base / 'unused'
+        other.symlink_to(self.base / 'nonexistent', target_is_directory=True)
+        self.environment['targets']['plugin'] = str(other)
+        self.save()
+        with self.assertRaises(ctl.SafetyError):
+            self.sync(True)
+        self.assertFalse(self.target.exists())
+
+    def test_unused_declared_target_is_locked(self):
+        other = self.base / 'unused'
+        self.environment['targets']['plugin'] = str(other)
+        self.save()
+        (other / '.agents-sync.lock').mkdir(parents=True)
+        with self.assertRaises(ctl.SafetyError):
+            self.sync(True)
+        self.assertTrue((other / '.agents-sync.lock').exists())
+        self.assertFalse((self.target / 'sample').exists())
+
+    def test_duplicate_json_keys_are_rejected(self):
+        self.env.write_text('{"harness":"codex","harness":"hermes","targets":' + json.dumps(self.environment['targets']) + ',"items":["sample"]}')
+        with self.assertRaises(ctl.SafetyError):
+            self.sync(True)
+        self.assertFalse(self.target.exists())
+
+    def test_unknown_tilde_user_is_rejected_cleanly(self):
+        self.environment['targets']['skill'] = '~agentsctl-user-that-does-not-exist/skills'
+        self.save()
+        with self.assertRaises(ctl.SafetyError):
+            self.sync(True)
+
     def test_preview_is_read_only(self):
         before = sorted(str(p) for p in self.base.rglob('*'))
         self.assertTrue(hasattr(ctl, 'sync'), 'sync entry point is required')

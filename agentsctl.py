@@ -26,9 +26,17 @@ def load_json(path):
     no_links(path)
     require(path.is_file(), f'JSON input must be a regular file: {path}')
     try:
-        return json.loads(path.read_text(encoding='utf-8'))
+        return json.loads(path.read_text(encoding='utf-8'), object_pairs_hook=unique_object)
     except (json.JSONDecodeError, UnicodeError) as exc:
         raise SafetyError(f'invalid JSON: {path}: {exc}') from exc
+
+
+def unique_object(pairs):
+    result = {}
+    for key, value in pairs:
+        require(key not in result, f'duplicate JSON key: {key}')
+        result[key] = value
+    return result
 
 
 HARNESS = {'hermes', 'claude', 'codex', 'cursor'}
@@ -57,7 +65,10 @@ def overlap(a, b):
 
 def absolute(value):
     require(text(value), 'path must be a nonempty string')
-    path = Path(value).expanduser()
+    try:
+        path = Path(value).expanduser()
+    except RuntimeError as exc:
+        raise SafetyError(f'cannot expand home directory: {value}') from exc
     require(path.is_absolute() and '..' not in path.parts, f'noncanonical absolute path: {value}')
     return path
 
@@ -104,6 +115,8 @@ def prepare(env, repo):
     for kind, value in targets.items():
         require(kind in KINDS, 'invalid target kind')
         root = absolute(value)
+        no_links(root)
+        require(not root.exists() or root.is_dir(), f'target must be a directory: {root}')
         require(not overlap(root, repo), 'target overlaps repository')
         require(not any(overlap(root, other) for other in roots.values()), 'target roots overlap')
         roots[kind] = root
@@ -129,7 +142,7 @@ def prepare(env, repo):
         wanted = digest(source)
         action, old = ownership(dest, meta, identifier, wanted)
         plans.append(dict(id=identifier, source=source, root=root, dest=dest, meta=meta, wanted=wanted, action=action, old=old))
-    return plans
+    return plans, tuple(sorted(roots.values()))
 
 
 def ownership(dest, meta, identifier, wanted):
@@ -213,11 +226,11 @@ def remove(path):
 
 def sync(env, repo, apply=False):
     env, repo = Path(env).absolute(), Path(repo).absolute()
-    plans = prepare(env, repo)
+    plans, roots = prepare(env, repo)
     if apply:
         acquired = []
         try:
-            for root in sorted({p['root'] for p in plans}):
+            for root in roots:
                 no_links(root)
                 root.mkdir(parents=True, exist_ok=True)
                 lock = root / '.agents-sync.lock'
@@ -226,8 +239,8 @@ def sync(env, repo, apply=False):
                 except FileExistsError as exc:
                     raise SafetyError(f'target locked: {root}') from exc
                 acquired.append((lock, lock.stat().st_ino))
-            refreshed = prepare(env, repo)
-            require(refreshed == plans, 'configuration or payload changed during lock acquisition; retry')
+            refreshed, refreshed_roots = prepare(env, repo)
+            require((refreshed, refreshed_roots) == (plans, roots), 'configuration or payload changed during lock acquisition; retry')
             for plan in refreshed:
                 recheck(plan)
                 require(digest(plan['source']) == plan['wanted'], 'source changed after preflight')
