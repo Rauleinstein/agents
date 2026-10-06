@@ -1,0 +1,7 @@
+__pycache__/
+*.py[cod]
+.venv/
+.env*
+environments/*.local.json
+.agents-managed/
+.agents-sync.lock/
