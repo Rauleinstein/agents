@@ -1,5 +1,7 @@
 # Pinned upstreams and reproducible setup
 
+The catalog installer, importer and tests are native Node tools. They do not invoke Python. The Python commands below belong only to the separately retained official third-party Spec Kit CLI, for optional scaffold initialization or regenerating upstream skills. Do not confuse that toolkit with an installer runtime dependency.
+
 ## Provenance
 
 | Upstream | Revision | Version | License |
@@ -66,14 +68,14 @@ Do **not** use the official Hermes integration for catalog maintenance: at this 
 Use clean local clones checked out at the exact pins above, and generate the disposable project with the matching installed official CLI before running:
 
 ```sh
-python scripts/import_upstreams.py \
+node scripts/import-upstreams.js \
   --matt /absolute/path/to/pinned-matt-clone \
   --spec /absolute/path/to/pinned-spec-kit-clone \
   --generated /absolute/path/to/disposable-project/.agents/skills \
   --repo /absolute/path/to/agents
-python -m unittest discover -s tests -v
+npm test
 ```
 
-The helper copies local verified sources; it does not fetch or initialize projects, and does not activate anything. Its generated-directory input is trusted maintainer output, not an authenticated substitute for running the official generator: verify the CLI revision and compare a clean reproduction before accepting changes. It rebuilds the 48 upstream entries and four base environments, then preserves explicitly listed optional originals from `local-examples.json`; duplicate IDs and upstream-ID conflicts are rejected. Other hand-added catalog entries must be reconciled deliberately rather than assumed preserved. It does not prune old files on version changes; import a new pin into clean staging, inspect diffs and removals, then integrate. Changing `PINS` requires a fresh review, not just a successful test.
+The Node helper copies local verified sources; it does not fetch or initialize projects, and does not activate anything. Its generated-directory input is trusted maintainer output, not an authenticated substitute for running the official generator: verify the CLI revision and compare a clean reproduction before accepting changes. It rebuilds the 48 upstream entries and four base environments, then preserves explicitly listed optional originals from `local-examples.json`; duplicate IDs and upstream-ID conflicts are rejected. Other hand-added catalog entries must be reconciled deliberately rather than assumed preserved. It does not prune old files on version changes; import a new pin into clean staging, inspect diffs and removals, then integrate. Changing `PINS` requires a fresh review, not just a successful test.
 
 Optional misc skills and experimental in-progress skills are available by adding their catalog IDs to a private environment. Check harness support first: `mattpocock-git-guardrails-claude-code` supports Claude only. There is no automatic plugin/hook activation.

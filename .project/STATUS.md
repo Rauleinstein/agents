@@ -4,33 +4,38 @@
 - **State:** active
 - **Priority:** P2
 - **Purpose:** reviewed central artifacts with explicit, safe deployment to Hermes, Claude Code, Codex and Cursor.
-- **GitHub repository:** https://github.com/Rauleinstein/agents (private; repository visibility and remote `main` verified).
+- **GitHub repository:** https://github.com/Rauleinstein/agents — public visibility verified through both GitHub CLI and unauthenticated API.
+- **Runtime:** Node.js 20+; no first-party Python installer, importer or tests.
 - **Next action:** approve one consumer environment and validate skill discovery; initialize `.specify/` in any project that will use Spec Kit.
 
-## Delivered implementation
+## Implementation
 
-- Version-1 catalog with **52 entries**: 38 Matt Pocock skills, 10 official generated Spec Kit consumer skills, and four optional original examples.
-- Default selection: **37 upstream skills** per environment (27 Matt stable + 10 Spec Kit). Four Matt misc skills are optional; seven in-progress skills are experimental.
+- Native Node installer, executable `agentsctl` bin, and npm package metadata. GitHub distribution supports npx; no npm-registry publication has been performed.
+- `sync --harness <name>` resolves bundled configuration relative to the package. Explicit `--env` supports custom selection and destinations. Preview-only unless `--apply`.
+- Version-1 catalog with **52 entries**: 38 Matt Pocock skills, 10 official generated Spec Kit consumer skills, and four optional originals.
+- Default selection: **37 upstream skills** per environment (27 stable Matt + 10 Spec Kit). Four Matt misc skills are optional; seven in-progress skills are experimental.
 - Exact pins: Matt `4588b32ecab9ecc9fc8cc6b6c5e7d675b6004b0d` (1.3.1); Spec Kit `2dda047809dd17fa56200408ce0228a2cfe08be7` (1.1.1.dev0).
-- 159 original Matt files and 833 original Spec Kit files retained byte-for-byte with manifests and MIT notices. All ten generated skills were reproduced byte-identically using original and vendored official CLI builds in scratch projects.
-- Preview-first installer, ownership/hash checks, unmanaged/local-edit protection, target locks and per-artifact atomic replacement.
-- Native Markdown agent deployment and inert plugin staging. Original examples persist through re-import via `local-examples.json`.
-- Independent specification and quality reviews passed after fixing Unicode-path error handling and clarifying committed-backup cleanup warnings.
+- 159 original Matt files and 833 original Spec Kit files retained byte-for-byte with manifests and MIT notices. Generated Spec Kit instructions retain verified official output hashes.
+- Ownership digests remain compatible with previous installations. Schema checks, duplicate JSON-key rejection, Unicode validation, unmanaged/local-edit protection, sorted target locks and pre-commit rollback are tested.
+- Native agent deployment and inert plugin staging. Original entries survive re-import through `local-examples.json`.
+- Node maintainer importer verifies Git pins, tracked bytes, resource closure and generation inventory before writing. It never initializes consumer projects or runs hooks.
+- Packaging-only `.npmignore` overrides retain original files otherwise omitted by nested upstream ignore rules.
 
-## Observed verification
+## Observed local verification
 
-`python3 -m unittest discover -q`: **59 tests passed** on Linux/Python 3.14.7. Tests deploy and read back all default packages in disposable roots, verify shared Codex/Cursor idempotence, native examples and plugin non-execution. `git diff --check` passed.
+`npm test`: **127 tests passed** on Linux/Node v26.7.0, including real npm-tarball inspection and isolated offline npx preview/apply/idempotence. Manifest tests verify upstream files, generated skills and all 37 default packages per harness. Tests never install into real profiles. `git diff --check` passed.
 
-GitHub Actions configuration covers Ubuntu and macOS on Python 3.11 and 3.14; remote run results must be read back for the delivered commit, not inferred from local tests.
+CI configuration uses Node 20/22/24 on Ubuntu/macOS with no Python setup. Published-GitHub npx execution and remote CI results must be read back for the delivered migration commit.
 
 ## Boundaries
 
+- Official vendored Spec Kit contains Python source as immutable third-party material. Its optional CLI initialization/regeneration still has upstream Python dependencies; our installer, importer, tests and npx execution do not use them.
 - No real harness profiles, hooks, cloud sync or native plugin activation changed.
-- Cursor and Codex share `~/.agents/skills`; requested Cursor agent path is `~/.agents/agents`. Native discovery at that agent path is not verified.
-- Consumer Spec Kit projects need separate `.specify/` initialization; skill copying alone does not supply project scaffolding.
-- Matt setup, tracker changes and skill-specific commands remain explicit consumer actions.
-- Pre-commit handled failures roll back per artifact. Post-commit backup cleanup failures warn while keeping the committed install; no whole-batch or hard-crash transaction guarantee.
+- Cursor and Codex share `~/.agents/skills`; requested Cursor agent path is `~/.agents/agents`. Native discovery at that agent path is unverified.
+- Consumer Spec Kit projects need separate `.specify/` initialization; copying skills is not scaffold initialization.
+- Matt setup, tracker changes and skill instructions remain explicit consumer actions.
+- Handled pre-commit failures roll back per artifact. Post-commit backup-cleanup failures warn while retaining the committed installation. No whole-batch or hard-crash transaction guarantee.
 - Cooperative locks do not stop other editors/installers. No force overwrite or destructive uninstall.
-- Static review is not a security audit. Vendored CLI source is pinned; Python dependency versions are not locked.
-- Protected `AGENTS.md` creation was denied and was not retried. Vendor policy files and `.github/**` were excluded; this project's own CI workflow is separate.
-- Re-import accepts trusted maintainer-generated output and preserves explicit `local-examples.json` entries; other hand-added entries and new pins require clean staging and deliberate diff/removal review.
+- Static review is not a security audit. First-party code has no npm dependencies; optional upstream Python dependencies are not locked.
+- Protected `AGENTS.md` creation was denied and was not retried. Vendored policy files and `.github/**` were excluded; project CI is separate.
+- Deliberate re-import accepts trusted maintainer-generated output and preserves explicit originals; new upstream pins and other hand-added entries need review.

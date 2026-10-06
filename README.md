@@ -1,6 +1,35 @@
-# Central agent catalog
+# Agents — shared agent artifacts
 
-A pinned, inspectable source for skills shared by Hermes, Claude Code, Codex and Cursor. `agentsctl.py` previews or copies catalog payloads; it does not run their instructions, install a CLI, execute hooks, or activate plugins.
+A pinned, inspectable catalog for Hermes, Claude Code, Codex and Cursor. The installer and maintainer import tool use **Node.js 20+**, with no Python runtime or third-party npm dependencies. Installation copies reviewed files; it never executes skill instructions, hooks, or plugin activation commands.
+
+## Run with npx
+
+Use the public GitHub source without cloning it manually or installing globally:
+
+```sh
+# Preview only; no harness directories are written.
+npx --yes --package=github:Rauleinstein/agents agentsctl sync --harness cursor
+
+# Apply after reviewing the preview and selected destination.
+npx --yes --package=github:Rauleinstein/agents agentsctl sync --harness cursor --apply
+```
+
+Choose `hermes`, `claude`, `codex`, or `cursor`. `npx` downloads the package into npm's cache; the CLI itself remains preview-only until `--apply`. This is a GitHub-distributed package, **not a package published to the npm registry**. Use `github:Rauleinstein/agents#<commit>` to pin the installer revision instead of following the branch.
+
+For explicit machine/project configuration:
+
+```sh
+npx --yes --package=github:Rauleinstein/agents agentsctl sync --env /absolute/path/to/environment.json
+```
+
+From a local checkout:
+
+```sh
+node bin/agentsctl.js sync --harness codex
+node bin/agentsctl.js sync --env environments/workstation.local.json --apply
+```
+
+Bundled harness configurations resolve relative to the installed package, not the current working directory. `--env` chooses an explicit JSON environment; do not combine it with `--harness`.
 
 ## Included base
 
@@ -8,66 +37,63 @@ A pinned, inspectable source for skills shared by Hermes, Claude Code, Codex and
 |---|---:|---:|---|
 | Matt Pocock skills v1.3.1 | 38 | 27 (20 engineering + 7 productivity) | 4 optional misc; 7 experimental in-progress |
 | GitHub Spec Kit v1.1.1.dev0 | 10 official generated consumer workflow skills | 10 | Contributor skills are not the consumer workflow |
-| Total upstream | 48 | 37 | Each of four environment examples selects the same 37 |
+| Total upstream | 48 | 37 | All four environments select the same 37 |
 
-The catalog also includes four optional original examples: `verify-before-reporting`, `claude-reviewer`, `cursor-reviewer`, and `example-bundle` (inert plugin fixture). These bring the catalog to **52 entries** without changing the base selection. They persist through re-import via `local-examples.json`. Select them explicitly in an ignored `environments/<name>.local.json`; agent entries need an `agent` target and the plugin fixture needs a separate `plugin` staging target. Cursor uses `~/.agents/agents` and `~/.agents/staged/cursor`, not `.cursor`. Native subagent discovery at the requested path remains unverified.
+Four optional originals bring the catalog to **52 entries**: `verify-before-reporting`, `claude-reviewer`, `cursor-reviewer`, and `example-bundle` (an inert plugin fixture, not a runnable plugin). Their entries persist through re-import via `local-examples.json`; they are not selected by default.
 
-Matt catalog IDs are `mattpocock-<name>` while installation directories and native frontmatter retain upstream names. Spec Kit IDs and directories are `speckit-<command>`. Full skill resources, metadata, credits and MIT notices are retained. Each imported skill carries a LICENSE file.
+Matt IDs use `mattpocock-<name>`, while directories/frontmatter preserve upstream names. Spec Kit IDs and directories use `speckit-<command>`. Original resources, metadata, credits and MIT notices are retained; each imported skill carries its LICENSE.
 
-## Preview, then apply
+## Environments and ownership
 
-From this repository:
-
-```sh
-python agentsctl.py sync --env environments/codex.json
-python agentsctl.py sync --env environments/codex.json --apply
-```
-
-Choose `hermes.json`, `claude.json`, `codex.json` or `cursor.json`, or copy an example into your own environment configuration. These examples are not activated automatically.
-
-| Harness | Skill target |
+| Harness | Default skill target |
 |---|---|
 | Hermes | `~/.hermes/skills` |
 | Claude Code | `~/.claude/skills` |
 | Codex | `~/.agents/skills` |
-| Cursor | `~/.agents/skills` (requested shared layout, not `.cursor`) |
+| Cursor | `~/.agents/skills` |
 
-Codex and Cursor share IDs, payloads and ownership metadata: applying the second environment is idempotent. For a named Hermes profile, explicitly change the target to that profile's skill directory; the default example is not profile-aware. Never aim two different artifacts with the same native name at one root.
+Codex and Cursor intentionally share artifacts and ownership records. Applying the second configuration is idempotent. For a named Hermes profile, explicitly select its directory in your environment file; the default configuration never infers another profile.
 
-An unmanaged existing directory, locally modified managed payload, mismatched metadata, symlink or overlapping target is a conflict, not permission to overwrite. There is no force mode. Reconcile manually after preserving your local version. Preview is read-only. Apply preflights all items and locks target roots, but replacement/rollback is **per artifact**, not a crash-atomic transaction across the whole environment.
+Copy a bundled configuration into your own ignored `environments/<name>.local.json` to change selection/targets. Native agent examples require an `agent` target; plugins require a separate `plugin` staging root. Requested Cursor paths are `~/.agents/agents` and `~/.agents/staged/cursor`, not `.cursor`.
 
-Each artifact commits when both its new payload and ownership metadata have been replaced. Handled failures before that boundary attempt to restore the original payload and metadata; rollback errors remain visible. After commit, failure to remove the old `.agents-backup-*` is **successful installation/update with a warning on stderr**, not a failed update or a rollback. The warning names the backup and reports the cleanup error. Preserve the committed payload and metadata; inspect and manually remove any remaining backup. Directory cleanup can partially delete a backup before failing, so remaining backup contents are not guaranteed to be a complete original. There is no crash-recovery guarantee.
+Unmanaged existing payloads, modified managed content, mismatched metadata, symlinks and overlapping targets are conflicts. There is no force overwrite. Preserve and reconcile local content manually. The CLI validates every selected item before writing, then locks target roots and checks ownership again.
 
-Configuration paths and provenance strings must contain valid Unicode without lone surrogate code points (including surrogateescape values). Malformed input is rejected during preflight with CLI exit status 2, before target writes.
+Replacement/rollback is **per artifact**, not a whole-environment or hard-crash transaction. An artifact commits when its payload and metadata are both replaced. Handled pre-commit failures attempt rollback; rollback failures remain visible. Failed cleanup of an old backup after commit emits a stderr warning while keeping the committed update. Cleanup can partially delete a backup, so it is not guaranteed complete. Cooperative locks do not prevent other editors/installers from changing files.
 
-For reviewed repository updates:
+Metadata uses the same payload digest format as the original implementation, so existing managed installations remain recognizable. Paths/provenance require valid Unicode without lone surrogate code points. Invalid input returns exit status 2 with a controlled error.
+
+## Updates
+
+For a local checkout:
 
 ```sh
 git pull --ff-only
-python agentsctl.py sync --env environments/codex.json
-python agentsctl.py sync --env environments/codex.json --apply
+node bin/agentsctl.js sync --harness cursor
+node bin/agentsctl.js sync --harness cursor --apply
 ```
 
-`git pull` updates the central repository, not live upstream imports; revisions remain pinned until deliberately re-imported and reviewed.
+For npx, select the newly reviewed Git revision and repeat preview/apply. Upstream sources do not track mutable branches automatically: importing a new upstream pin is an explicit maintenance operation. See [provenance and reproduction](docs/upstreams.md).
 
-## Use, rather than just copy
+## Deployment is not activation
 
-Matt's explicit user-invocation skills preserve `disable-model-invocation: true`. Slash command and argument-hint behavior differs by harness; copying files is not proof of every harness's discovery or invocation semantics. Run the upstream `setup-matt-pocock-skills` workflow in a consumer project to choose its issue tracker, labels and domain-document layout before using ticket-driven engineering flows. That workflow and some optional skills change project configuration: review and approve those changes separately. The `git-guardrails-claude-code` skill is optional and Claude-only; merely copying its script does not enable hooks.
+Matt's native `disable-model-invocation`, slash commands and orchestration instructions are preserved; filesystem deployment does not prove each harness implements identical invocation semantics. Run its setup workflow deliberately in a consumer project before using tracker/domain-dependent flows. The optional Claude git guardrail is not enabled by copying it.
 
-**Spec Kit needs project-local `.specify/` infrastructure. Central skills alone are not a working Spec Kit project.** See [setup and reproduction](docs/upstreams.md) for the verified pinned CLI command; initialize each consumer project, never this catalog repo. Start with constitution → specify → clarify (optional) → plan → tasks → analyze (optional) → implement; converge appends remaining work. `taskstoissues` needs a configured GitHub/MCP integration and permission to create issues.
+**Spec Kit requires project-local `.specify/` infrastructure.** Installing its ten skills does not initialize a project. Our installer/importer/tests need only Node; the separately vendored official Spec Kit CLI still has its upstream Python dependencies. They are retained as third-party source for provenance and optional regeneration, not used by `agentsctl`. See the documented official setup in [docs/upstreams.md](docs/upstreams.md).
 
-Native agents are a separate artifact kind. Claude's conventional agent target is `~/.claude/agents`; the requested Cursor staging target is `~/.agents/agents`, but discovery there is unverified (consulted Cursor documentation described `.cursor`, `.claude` and `.codex` subagent paths, not `.agents/agents`). A read-only reviewer prompt is not an enforced permission boundary. Plugins should target separate inert staging roots, such as `~/.agents/staged/cursor`; native activation is manual. No agents or plugins are enabled by these base environments.
+Native Claude agent files conventionally use `~/.claude/agents`. Native Cursor discovery at the requested `~/.agents/agents` path remains unverified; do not silently create `.cursor` copies or change settings. A read-only prompt does not enforce tool permissions. Plugin activation, hooks, cloud sync, dependency installation and service restarts are always separate actions.
 
-## Verification
+## Verify locally
 
-Tests require `TMPDIR` to name an existing absolute directory with no symlink in its ancestry. CI supplies `runner.temp`. For a local checkout, use a dedicated directory (especially on macOS, where `/tmp` can be a symlink):
+Tests require an existing absolute `TMPDIR` with no symlink in its ancestry. CI sets it to `runner.temp`. For a local checkout, prepare a dedicated scratch directory first:
 
 ```sh
 mkdir -p "$PWD/.test-scratch"
-export TMPDIR="$(python -c 'from pathlib import Path; print(Path(".test-scratch").resolve())')"
-python -m unittest discover -v
+export TMPDIR="$(node --input-type=module -e 'import fs from "node:fs"; console.log(fs.realpathSync(".test-scratch"))')"
+npm test
+node bin/agentsctl.js --help
+npm pack --pack-destination "$TMPDIR"
 ```
 
-Integration tests use temporary roots under `$TMPDIR`, deploy all default skills, read back digests/ownership metadata, test shared-root idempotence and refuse unmanaged conflicts. Upstream manifests verify byte preservation; generated manifests verify rendered content. Tests do not write real user skill profiles. Static review is **not a security audit**, nor a full interactive end-to-end workflow test in each harness.
+Tests use disposable scratch roots, never real profiles. CI runs Node 20/22/24 on Ubuntu/macOS. Upstream manifests verify original bytes and generated hashes. Package tests check the actual npm tarball, not just local source files. Static review is not a security audit or full interactive harness workflow verification.
 
-See [upstream provenance and maintenance](docs/upstreams.md) and [.project/STATUS.md](.project/STATUS.md).
+See [.project/STATUS.md](.project/STATUS.md) for delivery evidence and remaining limits.
