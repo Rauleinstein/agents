@@ -211,6 +211,57 @@ class SyncTests(unittest.TestCase):
             self.sync(True)
         self.assertFalse(self.target.exists())
 
+    def test_existing_lock_rejects_apply_but_not_preview(self):
+        lock = self.target / '.agents-sync.lock'
+        lock.mkdir(parents=True)
+        (lock / 'owner').write_text('other')
+        self.assertEqual(['install sample'], self.sync())
+        with self.assertRaises(ctl.SafetyError):
+            self.sync(True)
+        self.assertEqual('other', (lock / 'owner').read_text())
+        self.assertFalse((self.target / 'sample').exists())
+
+    def add_plugin(self):
+        import copy
+        item = copy.deepcopy(self.catalog['items'][0])
+        item.update(id='plugin', kind='plugin', name='plugin')
+        self.catalog['items'].append(item)
+        self.environment['items'].append('plugin')
+        other = self.base / 'z-plugins'
+        self.environment['targets']['plugin'] = str(other)
+        self.save()
+        return other
+
+    def test_multi_root_lock_release_on_acquisition_failure(self):
+        other = self.add_plugin()
+        (other / '.agents-sync.lock').mkdir(parents=True)
+        with self.assertRaises(ctl.SafetyError):
+            self.sync(True)
+        self.assertFalse((self.target / '.agents-sync.lock').exists())
+        self.assertTrue((other / '.agents-sync.lock').exists())
+        self.assertFalse((self.target / 'sample').exists())
+
+    def test_all_roots_locked_and_repreflight_before_apply(self):
+        from unittest.mock import patch
+        other = self.add_plugin()
+        original = ctl.prepare
+        calls = []
+        def inspect(env, repo):
+            calls.append(1)
+            if len(calls) == 2:
+                self.assertTrue((self.target / '.agents-sync.lock').is_dir())
+                self.assertTrue((other / '.agents-sync.lock').is_dir())
+                (self.target / 'sample').mkdir()
+                (self.target / 'sample' / 'mine').write_text('late')
+            return original(env, repo)
+        with patch.object(ctl, 'prepare', side_effect=inspect):
+            with self.assertRaises(ctl.SafetyError):
+                self.sync(True)
+        self.assertEqual(2, len(calls))
+        self.assertEqual('late', (self.target / 'sample' / 'mine').read_text())
+        self.assertFalse((self.target / '.agents-sync.lock').exists())
+        self.assertFalse((other / '.agents-sync.lock').exists())
+
     def test_preview_is_read_only(self):
         before = sorted(str(p) for p in self.base.rglob('*'))
         self.assertTrue(hasattr(ctl, 'sync'), 'sync entry point is required')

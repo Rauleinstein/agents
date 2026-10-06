@@ -171,12 +171,30 @@ def remove(path):
 
 
 def sync(env, repo, apply=False):
-    plans = prepare(Path(env), Path(repo))
+    env, repo = Path(env).absolute(), Path(repo).absolute()
+    plans = prepare(env, repo)
     if apply:
-        for plan in plans:
-            plan['root'].mkdir(parents=True, exist_ok=True)
-            if plan['action'] != 'unchanged':
-                replace_artifact(plan)
+        acquired = []
+        try:
+            for root in sorted({p['root'] for p in plans}):
+                no_links(root)
+                root.mkdir(parents=True, exist_ok=True)
+                lock = root / '.agents-sync.lock'
+                try:
+                    lock.mkdir()
+                except FileExistsError as exc:
+                    raise SafetyError(f'target locked: {root}') from exc
+                acquired.append((lock, lock.stat().st_ino))
+            refreshed = prepare(env, repo)
+            require(refreshed == plans, 'configuration or payload changed during lock acquisition; retry')
+            for plan in refreshed:
+                if plan['action'] != 'unchanged':
+                    replace_artifact(plan)
+        finally:
+            for lock, inode in reversed(acquired):
+                # Never delete a replacement lock owned by another process.
+                if lock.exists() and not lock.is_symlink() and lock.stat().st_ino == inode:
+                    lock.rmdir()
     return [p['action'] + ' ' + p['id'] for p in plans]
 
 
