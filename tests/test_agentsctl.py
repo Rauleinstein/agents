@@ -116,6 +116,101 @@ class SyncTests(unittest.TestCase):
         with self.assertRaises(ctl.SafetyError):
             self.sync(True)
 
+    def test_unmanaged_destination_is_preserved(self):
+        dest = self.target / 'sample'
+        dest.mkdir(parents=True)
+        (dest / 'mine').write_text('mine')
+        with self.assertRaises(ctl.SafetyError):
+            self.sync(True)
+        self.assertEqual('mine', (dest / 'mine').read_text())
+
+    def test_local_edits_are_preserved(self):
+        self.sync(True)
+        payload = self.target / 'sample' / 'SKILL.md'
+        payload.write_text('local')
+        with self.assertRaises(ctl.SafetyError):
+            self.sync(True)
+        self.assertEqual('local', payload.read_text())
+
+    def test_missing_managed_payload_is_rejected(self):
+        self.sync(True)
+        ctl.remove(self.target / 'sample')
+        with self.assertRaises(ctl.SafetyError):
+            self.sync(True)
+
+    def test_invalid_metadata_is_rejected(self):
+        self.sync(True)
+        meta = self.target / '.agents-managed' / 'sample.json'
+        for value in ['{', '[]', '{}', json.dumps({'id': 'other', 'digest': ctl.digest(self.source)}), json.dumps({'id': 'sample', 'digest': 'wrong'})]:
+            with self.subTest(value=value):
+                meta.write_text(value)
+                with self.assertRaises(ctl.SafetyError):
+                    self.sync(True)
+        meta.unlink()
+        meta.mkdir()
+        with self.assertRaises(ctl.SafetyError):
+            self.sync(True)
+
+    def test_source_ancestor_symlink_is_rejected(self):
+        real = self.repo / 'real'
+        self.source.parent.rename(real)
+        (self.repo / 'skills').symlink_to(real, target_is_directory=True)
+        with self.assertRaises(ctl.SafetyError):
+            self.sync(True)
+        self.assertFalse(self.target.exists())
+
+    def test_source_payload_symlink_and_special_file_are_rejected(self):
+        link = self.source / 'link'
+        link.symlink_to(self.source / 'SKILL.md')
+        with self.assertRaises(ctl.SafetyError):
+            self.sync(True)
+        link.unlink()
+        os.mkfifo(link)
+        with self.assertRaises(ctl.SafetyError):
+            self.sync(True)
+        self.assertFalse(self.target.exists())
+
+    def test_target_ancestor_symlink_is_rejected(self):
+        real = self.base / 'real-target'
+        real.mkdir()
+        self.target.symlink_to(real, target_is_directory=True)
+        with self.assertRaises(ctl.SafetyError):
+            self.sync(True)
+        self.assertEqual([], list(real.iterdir()))
+
+    def test_metadata_symlink_is_rejected(self):
+        self.sync(True)
+        meta = self.target / '.agents-managed' / 'sample.json'
+        real = self.base / 'meta.json'
+        meta.rename(real)
+        meta.symlink_to(real)
+        with self.assertRaises(ctl.SafetyError):
+            self.sync(True)
+        meta.unlink()
+        (self.target / '.agents-managed').rmdir()
+        (self.target / '.agents-managed').symlink_to(self.base, target_is_directory=True)
+        with self.assertRaises(ctl.SafetyError):
+            self.sync(True)
+
+    def test_destination_payload_symlink_is_rejected(self):
+        self.sync(True)
+        payload = self.target / 'sample' / 'SKILL.md'
+        payload.unlink()
+        payload.symlink_to(self.source / 'SKILL.md')
+        with self.assertRaises(ctl.SafetyError):
+            self.sync(True)
+
+    def test_all_item_preflight_failure_has_zero_writes(self):
+        import copy
+        second = copy.deepcopy(self.catalog['items'][0])
+        second.update(id='second', name='second', path='missing')
+        self.catalog['items'].append(second)
+        self.environment['items'].append('second')
+        self.save()
+        with self.assertRaises(ctl.SafetyError):
+            self.sync(True)
+        self.assertFalse(self.target.exists())
+
     def test_preview_is_read_only(self):
         before = sorted(str(p) for p in self.base.rglob('*'))
         self.assertTrue(hasattr(ctl, 'sync'), 'sync entry point is required')

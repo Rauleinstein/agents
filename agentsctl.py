@@ -8,8 +8,27 @@ import os
 import uuid
 
 
+def no_links(path):
+    """Check the whole existing ancestry without resolving away links."""
+    path = Path(path)
+    for part in [*reversed(path.parents), path]:
+        try:
+            mode = part.lstat().st_mode
+        except FileNotFoundError:
+            continue
+        require(not stat.S_ISLNK(mode), f'symlink forbidden: {part}')
+        if part != path:
+            require(stat.S_ISDIR(mode), f'ancestor is not a directory: {part}')
+
+
 def load_json(path):
-    return json.loads(Path(path).read_text())
+    path = Path(path)
+    no_links(path)
+    require(path.is_file(), f'JSON input must be a regular file: {path}')
+    try:
+        return json.loads(path.read_text(encoding='utf-8'))
+    except (json.JSONDecodeError, UnicodeError) as exc:
+        raise SafetyError(f'invalid JSON: {path}: {exc}') from exc
 
 
 HARNESS = {'hermes', 'claude', 'codex', 'cursor'}
@@ -114,10 +133,19 @@ def prepare(env, repo):
 
 
 def ownership(dest, meta, identifier, wanted):
+    no_links(dest)
+    no_links(meta)
     if meta.exists():
         old = load_json(meta)
+        require(isinstance(old, dict) and set(old) == {'id', 'digest'}
+                and old['id'] == identifier and isinstance(old['digest'], str)
+                and len(old['digest']) == 64 and all(c in '0123456789abcdef' for c in old['digest']),
+                f'malformed/mismatched ownership: {meta}')
+        require(dest.exists(), f'managed payload missing: {dest}')
         current = digest(dest)
+        require(current == old['digest'], f'local modifications: {dest}')
         return ('unchanged' if current == wanted else 'update'), old
+    require(not dest.exists(), f'unmanaged destination: {dest}')
     return 'install', None
 
 
@@ -171,6 +199,7 @@ def files(path):
 
 
 def digest(path):
+    no_links(Path(path))
     h = hashlib.sha256()
     for name, item in files(Path(path)):
         encoded = name.encode('utf-8')
