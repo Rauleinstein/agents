@@ -350,6 +350,61 @@ class SyncTests(unittest.TestCase):
         self.assertFalse((self.target / '.agents-sync.lock').exists())
         self.assertFalse((other / '.agents-sync.lock').exists())
 
+    def test_cli_preview_apply_and_errors(self):
+        import subprocess
+        command = [sys.executable, str(MODULE), 'sync', '--env', str(self.env), '--repo', str(self.repo)]
+        result = subprocess.run(command, capture_output=True, text=True)
+        self.assertEqual(0, result.returncode)
+        self.assertEqual('install sample\n', result.stdout)
+        self.assertFalse(self.target.exists())
+        result = subprocess.run(command + ['--apply'], capture_output=True, text=True)
+        self.assertEqual(0, result.returncode, result.stderr)
+        self.assertEqual('install sample\n', result.stdout)
+        result = subprocess.run(command, capture_output=True, text=True)
+        self.assertEqual('unchanged sample\n', result.stdout)
+        self.env.write_text('{broken')
+        result = subprocess.run(command + ['--apply'], capture_output=True, text=True)
+        self.assertEqual(2, result.returncode)
+        self.assertEqual('', result.stdout)
+        self.assertIn('error:', result.stderr)
+        self.assertNotIn('Traceback', result.stderr)
+
+    def test_native_markdown_agent_deploys_to_claude_and_cursor(self):
+        source = self.repo / 'agent.md'
+        source.write_text('# agent')
+        item = self.catalog['items'][0]
+        item.update(kind='agent', path='agent.md', name='sample.md', harnesses=['claude', 'cursor'])
+        self.environment['targets'] = {'agent': str(self.target)}
+        for harness in ['claude', 'cursor']:
+            with self.subTest(harness=harness):
+                self.environment['harness'] = harness
+                self.save()
+                result = self.sync(True)
+                self.assertEqual('# agent', (self.target / 'sample.md').read_text())
+                self.assertEqual(['install sample'] if harness == 'claude' else ['unchanged sample'], result)
+        self.environment['harness'] = 'codex'
+        self.save()
+        with self.assertRaises(ctl.SafetyError):
+            self.sync(True)
+
+    def test_cursor_codex_shared_skill_root_is_idempotent(self):
+        for harness in ['cursor', 'codex']:
+            self.environment['harness'] = harness
+            self.save()
+            self.assertEqual(['install sample'] if harness == 'cursor' else ['unchanged sample'], self.sync(True))
+
+    def test_plugin_script_is_copied_never_executed(self):
+        sentinel = self.base / 'executed'
+        script = self.source / 'install.sh'
+        script.write_text(f'#!/bin/sh\ntouch {sentinel}\n')
+        script.chmod(0o755)
+        self.catalog['items'][0]['kind'] = 'plugin'
+        self.environment['targets'] = {'plugin': str(self.target)}
+        self.save()
+        self.sync(True)
+        self.assertEqual(script.read_bytes(), (self.target / 'sample' / 'install.sh').read_bytes())
+        self.assertFalse(sentinel.exists())
+
     def test_preview_is_read_only(self):
         before = sorted(str(p) for p in self.base.rglob('*'))
         self.assertTrue(hasattr(ctl, 'sync'), 'sync entry point is required')

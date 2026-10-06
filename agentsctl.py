@@ -270,3 +270,26 @@ def digest(path):
         h.update(len(data).to_bytes(8, 'big'))
         h.update(data)
     return h.hexdigest()
+
+
+def main(argv=None):
+    import argparse
+    import sys
+    parser = argparse.ArgumentParser(description=__doc__)
+    sub = parser.add_subparsers(dest='command', required=True)
+    command = sub.add_parser('sync', help='preview or apply reviewed catalog artifacts')
+    command.add_argument('--env', required=True, type=Path)
+    command.add_argument('--repo', type=Path, default=Path(__file__).absolute().parent)
+    command.add_argument('--apply', action='store_true', help='write staged artifacts; default is read-only')
+    args = parser.parse_args(argv)
+    try:
+        for line in sync(args.env, args.repo, apply=args.apply):
+            print(line)
+    except (SafetyError, OSError) as exc:
+        print(f'error: {exc}', file=sys.stderr)
+        return 2
+    return 0
+
+
+if __name__ == '__main__':
+    raise SystemExit(main())
