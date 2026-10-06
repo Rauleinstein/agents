@@ -1,4 +1,3 @@
-import importlib.util
 import os
 from pathlib import Path
 import tempfile
@@ -9,9 +8,7 @@ MODULE = Path(__file__).resolve().parents[1] / 'agentsctl.py'
 class DigestTests(unittest.TestCase):
     def test_digest_is_stable_and_tracks_paths_and_bytes(self):
         self.assertTrue(MODULE.exists(), 'installer module must exist')
-        spec = importlib.util.spec_from_file_location('agentsctl', MODULE)
-        module = importlib.util.module_from_spec(spec)
-        spec.loader.exec_module(module)
+        module = ctl
         with tempfile.TemporaryDirectory(dir=os.environ['TMPDIR']) as root:
             p = Path(root)
             (p / 'a').write_bytes(b'one')
@@ -35,14 +32,18 @@ class SyncTests(unittest.TestCase):
         self.tmp = tempfile.TemporaryDirectory(dir=os.environ['TMPDIR'])
         self.addCleanup(self.tmp.cleanup)
         self.base = Path(self.tmp.name)
+        # Keep even a failing relative-path implementation inside scratch.
+        previous_cwd = Path.cwd()
+        os.chdir(self.base)
+        self.addCleanup(os.chdir, previous_cwd)
         self.repo = self.base / 'repo'
         self.repo.mkdir()
         self.source = self.repo / 'skills' / 'sample'
         self.source.mkdir(parents=True)
         (self.source / 'SKILL.md').write_text('# sample')
         self.target = self.base / 'target'
-        self.catalog = {'version': 1, 'items': [dict(id='sample', kind='skill', path='skills/sample', name='sample', harnesses=['hermes', 'claude', 'cursor', 'codex'], provenance=dict(source='https://example.test', revision='abc', license='MIT', reviewed=True))]}
-        self.environment = dict(harness='hermes', targets={'skill': str(self.target)}, items=['sample'])
+        self.catalog: dict = {'version': 1, 'items': [dict(id='sample', kind='skill', path='skills/sample', name='sample', harnesses=['hermes', 'claude', 'cursor', 'codex'], provenance=dict(source='https://example.test', revision='abc', license='MIT', reviewed=True))]}
+        self.environment: dict = dict(harness='hermes', targets={'skill': str(self.target)}, items=['sample'])
         self.env = self.base / 'env.json'
         self.save()
 
@@ -435,6 +436,95 @@ class SyncTests(unittest.TestCase):
         self.save()
         with self.assertRaises(ctl.SafetyError):
             self.sync(True)
+
+    def test_payload_swap_failure_restores_original(self):
+        from unittest.mock import patch
+        self.sync(True)
+        meta = self.target / '.agents-managed' / 'sample.json'
+        old_meta = meta.read_bytes()
+        (self.source / 'SKILL.md').write_text('new')
+        original = os.replace
+        def fail(src, dst):
+            if Path(src).name.startswith('.agents-stage-'):
+                raise OSError('injected payload swap failure')
+            return original(src, dst)
+        with patch.object(ctl.os, 'replace', side_effect=fail):
+            with self.assertRaises(OSError):
+                self.sync(True)
+        self.assertEqual('# sample', (self.target / 'sample' / 'SKILL.md').read_text())
+        self.assertEqual(old_meta, meta.read_bytes())
+        self.assertEqual({'sample', '.agents-managed'}, {p.name for p in self.target.iterdir()})
+
+    def test_source_mutation_after_copy_is_rejected(self):
+        from unittest.mock import patch
+        original = ctl.shutil.copytree
+        def mutate(src, dst, **kwargs):
+            result = original(src, dst, **kwargs)
+            if Path(src) == self.source:
+                (self.source / 'SKILL.md').write_text('after copy')
+            return result
+        with patch.object(ctl.shutil, 'copytree', side_effect=mutate):
+            with self.assertRaises(ctl.SafetyError):
+                self.sync(True)
+        self.assertFalse((self.target / 'sample').exists())
+
+    def test_late_metadata_edit_is_preserved(self):
+        from unittest.mock import patch
+        self.sync(True)
+        meta = self.target / '.agents-managed' / 'sample.json'
+        (self.source / 'SKILL.md').write_text('new')
+        original = ctl.shutil.copytree
+        def edit(src, dst, **kwargs):
+            result = original(src, dst, **kwargs)
+            if Path(src) == self.source:
+                meta.write_text('local metadata')
+            return result
+        with patch.object(ctl.shutil, 'copytree', side_effect=edit):
+            with self.assertRaises(ctl.SafetyError):
+                self.sync(True)
+        self.assertEqual('local metadata', meta.read_text())
+        self.assertEqual('# sample', (self.target / 'sample' / 'SKILL.md').read_text())
+
+    def test_tilde_target_expands_without_real_profile_writes(self):
+        from unittest.mock import patch
+        self.environment['targets']['skill'] = '~/target'
+        self.save()
+        with patch.dict(os.environ, {'HOME': str(self.base)}):
+            self.sync(True)
+        self.assertTrue((self.target / 'sample' / 'SKILL.md').is_file())
+
+    def test_lock_replacement_is_not_removed(self):
+        from unittest.mock import patch
+        lock = self.target / '.agents-sync.lock'
+        original = ctl.replace_artifact
+        def replace_lock(plan):
+            lock.rename(self.base / 'original-lock')
+            lock.mkdir()
+            (lock / 'owner').write_text('another process')
+            return original(plan)
+        with patch.object(ctl, 'replace_artifact', side_effect=replace_lock):
+            self.sync(True)
+        self.assertEqual('another process', (lock / 'owner').read_text())
+
+    def test_lock_acquisition_is_sorted(self):
+        from unittest.mock import patch
+        other = self.add_plugin()
+        original = Path.mkdir
+        acquired = []
+        def record(path, *args, **kwargs):
+            if path.name == '.agents-sync.lock':
+                acquired.append(path.parent)
+            return original(path, *args, **kwargs)
+        with patch.object(Path, 'mkdir', record):
+            self.sync(True)
+        self.assertEqual(sorted([self.target, other]), acquired)
+
+    def test_existing_preview_changes_no_payload_or_metadata(self):
+        self.sync(True)
+        before = {str(p): p.read_bytes() for p in self.target.rglob('*') if p.is_file()}
+        self.assertEqual(['unchanged sample'], self.sync())
+        self.assertEqual(before, {str(p): p.read_bytes() for p in self.target.rglob('*') if p.is_file()})
+        self.assertFalse((self.target / '.agents-sync.lock').exists())
 
     def test_preview_is_read_only(self):
         before = sorted(str(p) for p in self.base.rglob('*'))
