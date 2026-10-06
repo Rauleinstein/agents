@@ -25,7 +25,7 @@
 
 `npm test`: **127 tests passed** on Linux/Node v26.7.0, including real npm-tarball inspection and isolated offline npx preview/apply/idempotence. Manifest tests verify upstream files, generated skills and all 37 default packages per harness. Tests never install into real profiles. `git diff --check` passed.
 
-CI configuration uses Node 20/22/24 on Ubuntu/macOS with no Python setup. Published-GitHub npx execution and remote CI results must be read back for the delivered migration commit.
+Delivery commit `03b7124c0c4c042e1157baa4d96a35afb442d98c` was read back from public GitHub. CI run https://github.com/Rauleinstein/agents/actions/runs/37458411127 passed all six Node 20/22/24 jobs on Ubuntu/macOS, with no Python setup. A fresh `git archive` export passed all 127 tests. Commit-pinned HTTPS GitHub npx execution with isolated HOME/cache and no Git credentials verified 37 preview actions, 37 installs, 37 unchanged actions on repetition, and all 37 installed payload/ownership hashes. No real profile changed.
 
 ## Boundaries
 
