@@ -12,16 +12,100 @@ def load_json(path):
     return json.loads(Path(path).read_text())
 
 
+HARNESS = {'hermes', 'claude', 'codex', 'cursor'}
+KINDS = {'skill', 'agent', 'plugin'}
+
+
+def require(condition, message):
+    if not condition:
+        raise SafetyError(message)
+
+
+def safe_name(value):
+    import re
+    require(isinstance(value, str) and bool(re.fullmatch(r'[a-z0-9._-]+', value))
+            and value not in {'.', '..'} and not value.startswith('.agents-'),
+            f'invalid or reserved identifier/name: {value!r}')
+
+
+def text(value):
+    return isinstance(value, str) and bool(value.strip()) and '\x00' not in value
+
+
+def overlap(a, b):
+    return a == b or a in b.parents or b in a.parents
+
+
+def absolute(value):
+    require(text(value), 'path must be a nonempty string')
+    path = Path(value).expanduser()
+    require(path.is_absolute() and '..' not in path.parts, f'noncanonical absolute path: {value}')
+    return path
+
+
+def validate_catalog(catalog):
+    require(isinstance(catalog, dict) and type(catalog.get('version')) is int
+            and catalog['version'] == 1 and isinstance(catalog.get('items'), list), 'invalid catalog version/schema')
+    by_id = {}
+    for item in catalog['items']:
+        require(isinstance(item, dict), 'catalog item must be an object')
+        safe_name(item.get('id'))
+        safe_name(item.get('name'))
+        require(item.get('kind') in KINDS if isinstance(item.get('kind'), str) else False, 'invalid artifact kind')
+        require(text(item.get('path')), 'invalid source path')
+        path = Path(item['path'])
+        require(not path.is_absolute() and not any(p in {'.', '..', ''} for p in item['path'].split('/')),
+                'source must be a relative path without traversal')
+        harnesses = item.get('harnesses')
+        require(isinstance(harnesses, list) and bool(harnesses) and all(isinstance(h, str) and h in HARNESS for h in harnesses)
+                and len(set(harnesses)) == len(harnesses), 'invalid artifact harnesses')
+        provenance = item.get('provenance')
+        require(isinstance(provenance, dict) and provenance.get('reviewed') is True
+                and all(text(provenance.get(k)) for k in ('source', 'revision', 'license')), 'artifact must have reviewed provenance')
+        require(item['id'] not in by_id, 'duplicate catalog id')
+        by_id[item['id']] = item
+    return by_id
+
+
 def prepare(env, repo):
+    repo = absolute(str(repo))
     config = load_json(env)
-    catalog = load_json(repo / 'catalog.json')
-    by_id = {item['id']: item for item in catalog['items']}
-    plans = []
-    for identifier in config['items']:
+    by_id = validate_catalog(load_json(repo / 'catalog.json'))
+    require(isinstance(config, dict), 'environment must be an object')
+    harness = config.get('harness')
+    require(isinstance(harness, str) and harness in HARNESS, 'invalid environment harness')
+    selected = config.get('items')
+    require(isinstance(selected, list) and bool(selected), 'items must be a nonempty list')
+    for identifier in selected:
+        safe_name(identifier)
+    require(len(set(selected)) == len(selected), 'duplicate selected id')
+    targets = config.get('targets')
+    require(isinstance(targets, dict) and bool(targets), 'targets must be a nonempty object')
+    roots = {}
+    for kind, value in targets.items():
+        require(kind in KINDS, 'invalid target kind')
+        root = absolute(value)
+        require(not overlap(root, repo), 'target overlaps repository')
+        require(not any(overlap(root, other) for other in roots.values()), 'target roots overlap')
+        roots[kind] = root
+    plans, destinations = [], set()
+    for identifier in selected:
+        require(identifier in by_id, f'unknown catalog id: {identifier}')
         item = by_id[identifier]
+        require(harness in item['harnesses'], f'incompatible harness for {identifier}')
+        require(item['kind'] in roots, f'missing target for {item["kind"]}')
         source = repo / item['path']
-        root = Path(config['targets'][item['kind']]).expanduser()
+        if item['kind'] == 'agent':
+            require(harness in {'claude', 'cursor'} and source.is_file() and source.suffix == '.md'
+                    and item['name'].endswith('.md'), 'native agents require compatible Markdown files and names')
+        else:
+            require(source.is_dir(), f'{item["kind"]} must be a directory')
+            if item['kind'] == 'skill':
+                require((source / 'SKILL.md').is_file(), 'skill directory requires SKILL.md')
+        root = roots[item['kind']]
         dest = root / item['name']
+        require(dest not in destinations, 'duplicate destination')
+        destinations.add(dest)
         meta = root / '.agents-managed' / (item['name'] + '.json')
         wanted = digest(source)
         action, old = ownership(dest, meta, identifier, wanted)
