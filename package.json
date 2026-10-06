@@ -1,0 +1,12 @@
+{
+  "name": "@rauleinstein/agents",
+  "version": "0.1.0",
+  "description": "Pinned agent artifact catalog with preview-first safe staging",
+  "type": "module",
+  "engines": {"node": ">=20"},
+  "bin": {"agentsctl": "bin/agentsctl.js"},
+  "scripts": {"test": "node --test tests/*.test.js"},
+  "repository": {"type": "git", "url": "https://github.com/Rauleinstein/agents.git"},
+  "license": "UNLICENSED",
+  "files": ["bin/", "agentsctl.js", "catalog.json", "local-examples.json", "environments/hermes.json", "environments/claude.json", "environments/codex.json", "environments/cursor.json", "skills/", "agents/", "plugins/", "generated/", "vendor/**/*", "vendor/mattpocock-skills/.gitignore", "vendor/github-spec-kit/.gitignore", "vendor/github-spec-kit/.specify/memory/constitution.md", "vendor/github-spec-kit/docs/.gitignore", "vendor/github-spec-kit/extensions/template/.gitignore", "vendor/github-spec-kit/tests/hooks/.specify/extensions.yml", "README.md", "docs/", "tests/*.test.js", "tests/helpers.js", "scripts/*.js"]
+}

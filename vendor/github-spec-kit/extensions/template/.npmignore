@@ -1,0 +1,5 @@
+# Packaging override: retain imported manifests and ignored scaffolding.
+!.gitignore
+!.npmignore
+!.specify/
+!.specify/**
