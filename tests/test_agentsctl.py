@@ -281,6 +281,42 @@ class SyncTests(unittest.TestCase):
         self.assertEqual(old_meta, meta.read_bytes())
         self.assertEqual({'sample', '.agents-managed'}, {p.name for p in self.target.iterdir()})
 
+    def test_committed_backup_cleanup_failure_warns_without_rollback(self):
+        from contextlib import redirect_stderr, redirect_stdout
+        from io import StringIO
+        from unittest.mock import patch
+        self.sync(True)
+        original = ctl.remove
+        for partial in (False, True):
+            with self.subTest(partial=partial):
+                (self.source / 'SKILL.md').write_text(f'new {partial}')
+                backups = []
+                def fail(path):
+                    if path.name.startswith('.agents-backup-'):
+                        backups.append(path)
+                        if partial:
+                            (path / 'SKILL.md').unlink()
+                        raise OSError('injected backup cleanup failure')
+                    return original(path)
+                stdout, stderr = StringIO(), StringIO()
+                with patch.object(ctl, 'remove', side_effect=fail), redirect_stdout(stdout), redirect_stderr(stderr):
+                    result = ctl.main(['sync', '--env', str(self.env), '--repo', str(self.repo), '--apply'])
+                self.assertEqual(0, result)
+                self.assertEqual('update sample\n', stdout.getvalue())
+                self.assertIn('warning:', stderr.getvalue())
+                self.assertIn('committed', stderr.getvalue())
+                self.assertIn('manual cleanup', stderr.getvalue())
+                self.assertIn('injected backup cleanup failure', stderr.getvalue())
+                self.assertEqual(1, len(backups))
+                self.assertIn(str(backups[0]), stderr.getvalue())
+                self.assertTrue(backups[0].is_dir())
+                self.assertEqual(not partial, (backups[0] / 'SKILL.md').exists())
+                self.assertEqual(f'new {partial}', (self.target / 'sample' / 'SKILL.md').read_text())
+                meta = json.loads((self.target / '.agents-managed' / 'sample.json').read_text())
+                self.assertEqual({'id': 'sample', 'digest': ctl.digest(self.source)}, meta)
+                self.assertEqual(['unchanged sample'], self.sync())
+                self.assertFalse((self.target / '.agents-sync.lock').exists())
+
     def test_install_metadata_failure_removes_new_payload(self):
         from unittest.mock import patch
         original = os.replace
@@ -369,6 +405,37 @@ class SyncTests(unittest.TestCase):
         self.assertEqual('', result.stdout)
         self.assertIn('error:', result.stderr)
         self.assertNotIn('Traceback', result.stderr)
+
+    def test_cli_surrogate_configuration_strings_are_rejected_without_writes(self):
+        import copy
+        import subprocess
+        cases = [
+            ('target path', lambda c, e, s: e['targets'].update(skill=str(self.target) + s)),
+            ('source path', lambda c, e, s: c['items'][0].update(path='skills/' + s)),
+            ('catalog id', lambda c, e, s: c['items'][0].update(id=s)),
+            ('catalog name', lambda c, e, s: c['items'][0].update(name=s)),
+            ('selected id', lambda c, e, s: e.update(items=[s])),
+            ('provenance source', lambda c, e, s: c['items'][0]['provenance'].update(source=s)),
+            ('provenance revision', lambda c, e, s: c['items'][0]['provenance'].update(revision=s)),
+            ('provenance license', lambda c, e, s: c['items'][0]['provenance'].update(license=s)),
+        ]
+        original_c, original_e = copy.deepcopy(self.catalog), copy.deepcopy(self.environment)
+        command = [sys.executable, str(MODULE), 'sync', '--env', str(self.env), '--repo', str(self.repo), '--apply']
+        for surrogate in ('\ud800', '\udc80', '\udfff'):
+            for label, mutate in cases:
+                with self.subTest(field=label, surrogate=repr(surrogate)):
+                    self.catalog, self.environment = copy.deepcopy(original_c), copy.deepcopy(original_e)
+                    mutate(self.catalog, self.environment, surrogate)
+                    self.save()
+                    before_paths = sorted(str(p) for p in self.base.rglob('*'))
+                    before_bytes = {str(p): p.read_bytes() for p in self.base.rglob('*') if p.is_file()}
+                    result = subprocess.run(command, capture_output=True, text=True)
+                    self.assertEqual(2, result.returncode, result.stderr)
+                    self.assertEqual('', result.stdout)
+                    self.assertIn('error:', result.stderr)
+                    self.assertNotIn('Traceback', result.stderr)
+                    self.assertEqual(before_paths, sorted(str(p) for p in self.base.rglob('*')))
+                    self.assertEqual(before_bytes, {str(p): p.read_bytes() for p in self.base.rglob('*') if p.is_file()})
 
     def test_native_markdown_agent_deploys_to_claude_and_cursor(self):
         source = self.repo / 'agent.md'

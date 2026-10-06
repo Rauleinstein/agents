@@ -56,7 +56,9 @@ def safe_name(value):
 
 
 def text(value):
-    return isinstance(value, str) and bool(value.strip()) and '\x00' not in value
+    # Reject all lone surrogates, including those accepted by surrogateescape.
+    return (isinstance(value, str) and bool(value.strip()) and '\x00' not in value
+            and not any('\ud800' <= char <= '\udfff' for char in value))
 
 
 def overlap(a, b):
@@ -168,7 +170,7 @@ def recheck(plan):
 
 
 def replace_artifact(plan):
-    """Per-artifact swap with rollback on handled exceptions, not crash recovery."""
+    """Rollback handled pre-commit failures; warn on post-commit backup cleanup."""
     root, dest, meta = plan['root'], plan['dest'], plan['meta']
     token = uuid.uuid4().hex
     stage = root / ('.agents-stage-' + token)
@@ -214,7 +216,14 @@ def replace_artifact(plan):
             if temporary.exists() or temporary.is_symlink():
                 remove(temporary)
     if moved_old:
-        remove(backup)
+        # Payload and ownership metadata are committed. rmtree can partially
+        # delete the backup, so cleanup failure must never trigger rollback.
+        try:
+            remove(backup)
+        except OSError as exc:
+            import sys
+            print(f'warning: update committed; backup cleanup failed: {backup}: '
+                  f'{exc}; any remaining backup requires manual cleanup', file=sys.stderr)
 
 
 def remove(path):
