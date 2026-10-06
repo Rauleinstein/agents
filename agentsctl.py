@@ -149,18 +149,59 @@ def ownership(dest, meta, identifier, wanted):
     return 'install', None
 
 
+def recheck(plan):
+    action, old = ownership(plan['dest'], plan['meta'], plan['id'], plan['wanted'])
+    require((action, old) == (plan['action'], plan['old']), 'destination ownership changed; retry')
+
+
 def replace_artifact(plan):
+    """Per-artifact swap with rollback on handled exceptions, not crash recovery."""
     root, dest, meta = plan['root'], plan['dest'], plan['meta']
-    stage = root / ('.agents-stage-' + uuid.uuid4().hex)
-    if plan['source'].is_dir():
-        shutil.copytree(plan['source'], stage)
-    else:
-        shutil.copyfile(plan['source'], stage)
-    if dest.exists():
-        remove(dest)
-    os.replace(stage, dest)
-    meta.parent.mkdir(exist_ok=True)
-    meta.write_text(json.dumps(dict(id=plan['id'], digest=plan['wanted'])))
+    token = uuid.uuid4().hex
+    stage = root / ('.agents-stage-' + token)
+    backup = root / ('.agents-backup-' + token)
+    staged_meta = root / ('.agents-metadata-' + token)
+    moved_old = installed = metadata_written = False
+    old_meta = meta.read_bytes() if plan['old'] is not None else None
+    try:
+        # symlinks=True avoids following a newly introduced source link.
+        no_links(plan['source'])
+        if plan['source'].is_dir():
+            shutil.copytree(plan['source'], stage, symlinks=True)
+        else:
+            shutil.copyfile(plan['source'], stage, follow_symlinks=False)
+        require(digest(stage) == plan['wanted'], 'source changed while staging')
+        require(digest(plan['source']) == plan['wanted'], 'source changed after staging')
+        meta.parent.mkdir(exist_ok=True)
+        staged_meta.write_text(json.dumps(dict(id=plan['id'], digest=plan['wanted'])), encoding='utf-8')
+        # Last ownership/hash check immediately before the payload rename.
+        recheck(plan)
+        if plan['old'] is not None:
+            os.replace(dest, backup)
+            moved_old = True
+        os.replace(stage, dest)
+        installed = True
+        os.replace(staged_meta, meta)
+        metadata_written = True
+    except Exception:
+        # Exceptions are re-raised; rollback errors remain visible as well.
+        if installed:
+            remove(dest)
+        if moved_old:
+            os.replace(backup, dest)
+        if metadata_written:
+            if old_meta is None:
+                meta.unlink()
+            else:
+                staged_meta.write_bytes(old_meta)
+                os.replace(staged_meta, meta)
+        raise
+    finally:
+        for temporary in (stage, staged_meta):
+            if temporary.exists() or temporary.is_symlink():
+                remove(temporary)
+    if moved_old:
+        remove(backup)
 
 
 def remove(path):
@@ -188,6 +229,8 @@ def sync(env, repo, apply=False):
             refreshed = prepare(env, repo)
             require(refreshed == plans, 'configuration or payload changed during lock acquisition; retry')
             for plan in refreshed:
+                recheck(plan)
+                require(digest(plan['source']) == plan['wanted'], 'source changed after preflight')
                 if plan['action'] != 'unchanged':
                     replace_artifact(plan)
         finally:

@@ -262,6 +262,94 @@ class SyncTests(unittest.TestCase):
         self.assertFalse((self.target / '.agents-sync.lock').exists())
         self.assertFalse((other / '.agents-sync.lock').exists())
 
+    def test_metadata_replace_failure_rolls_back_payload_and_metadata(self):
+        from unittest.mock import patch
+        self.sync(True)
+        meta = self.target / '.agents-managed' / 'sample.json'
+        old_meta = meta.read_bytes()
+        (self.source / 'SKILL.md').write_text('new')
+        original = os.replace
+        def fail(src, dest):
+            if Path(dest) == meta:
+                raise OSError('injected metadata replacement failure')
+            return original(src, dest)
+        with patch.object(ctl.os, 'replace', side_effect=fail):
+            with self.assertRaises(OSError):
+                self.sync(True)
+        self.assertEqual('# sample', (self.target / 'sample' / 'SKILL.md').read_text())
+        self.assertEqual(old_meta, meta.read_bytes())
+        self.assertEqual({'sample', '.agents-managed'}, {p.name for p in self.target.iterdir()})
+
+    def test_install_metadata_failure_removes_new_payload(self):
+        from unittest.mock import patch
+        original = os.replace
+        def fail(src, dest):
+            if Path(dest).suffix == '.json':
+                raise OSError('injected')
+            return original(src, dest)
+        with patch.object(ctl.os, 'replace', side_effect=fail):
+            with self.assertRaises(OSError):
+                self.sync(True)
+        self.assertFalse((self.target / 'sample').exists())
+        self.assertFalse((self.target / '.agents-managed' / 'sample.json').exists())
+        self.assertFalse((self.target / '.agents-sync.lock').exists())
+
+    def test_late_destination_edit_is_preserved(self):
+        from unittest.mock import patch
+        self.sync(True)
+        payload = self.target / 'sample' / 'SKILL.md'
+        (self.source / 'SKILL.md').write_text('new')
+        original = ctl.shutil.copytree
+        def edit(src, dst, **kwargs):
+            result = original(src, dst, **kwargs)
+            if Path(src) == self.source:
+                payload.write_text('late local')
+            return result
+        with patch.object(ctl.shutil, 'copytree', side_effect=edit):
+            with self.assertRaises(ctl.SafetyError):
+                self.sync(True)
+        self.assertEqual('late local', payload.read_text())
+        self.assertFalse((self.target / '.agents-sync.lock').exists())
+
+    def test_late_source_mutation_rejected(self):
+        from unittest.mock import patch
+        original = ctl.shutil.copytree
+        def mutate(src, dst, **kwargs):
+            if Path(src) == self.source:
+                (self.source / 'SKILL.md').write_text('late source')
+            return original(src, dst, **kwargs)
+        with patch.object(ctl.shutil, 'copytree', side_effect=mutate):
+            with self.assertRaises(ctl.SafetyError):
+                self.sync(True)
+        self.assertFalse((self.target / 'sample').exists())
+        self.assertEqual('late source', (self.source / 'SKILL.md').read_text())
+
+    def test_unchanged_payload_is_rechecked_under_lock(self):
+        from unittest.mock import patch
+        self.sync(True)
+        original = ctl.prepare
+        calls = []
+        payload = self.target / 'sample' / 'SKILL.md'
+        def change(env, repo):
+            plans = original(env, repo)
+            calls.append(1)
+            if len(calls) == 2:
+                payload.write_text('late unchanged')
+            return plans
+        with patch.object(ctl, 'prepare', side_effect=change):
+            with self.assertRaises(ctl.SafetyError):
+                self.sync(True)
+        self.assertEqual('late unchanged', payload.read_text())
+
+    def test_multi_root_locks_released_after_write_failure(self):
+        from unittest.mock import patch
+        other = self.add_plugin()
+        with patch.object(ctl, 'replace_artifact', side_effect=OSError('injected')):
+            with self.assertRaises(OSError):
+                self.sync(True)
+        self.assertFalse((self.target / '.agents-sync.lock').exists())
+        self.assertFalse((other / '.agents-sync.lock').exists())
+
     def test_preview_is_read_only(self):
         before = sorted(str(p) for p in self.base.rglob('*'))
         self.assertTrue(hasattr(ctl, 'sync'), 'sync entry point is required')
