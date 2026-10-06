@@ -5,3 +5,4 @@ __pycache__/
 environments/*.local.json
 .agents-managed/
 .agents-sync.lock/
+.test-scratch/

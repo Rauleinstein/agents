@@ -1,0 +1,79 @@
+# Pinned upstreams and reproducible setup
+
+## Provenance
+
+| Upstream | Revision | Version | License |
+|---|---|---|---|
+| https://github.com/mattpocock/skills | `4588b32ecab9ecc9fc8cc6b6c5e7d675b6004b0d` | 1.3.1 | MIT, Copyright (c) 2026 Matt Pocock |
+| https://github.com/github/spec-kit | `2dda047809dd17fa56200408ce0228a2cfe08be7` | 1.1.1.dev0 | MIT, Copyright GitHub, Inc. |
+
+`vendor/*/IMPORT-PROVENANCE.json` records SHA-256 hashes for every imported original file, original revision, license, version and exclusions. Matt retains 159 upstream files, including its README, LICENSE, full 38-skill tree and supporting resources. Spec Kit retains 833 upstream files, including README, LICENSE, pyproject, source, templates, scripts, integrations, extensions, presets, bundles, workflows and tests. These are source files, not a globally installed executable.
+
+Only tracked regular files with bytes matching `git show <pin>:<path>` are imported. `.git`, untracked caches and build output are not copied. Protected `AGENTS.md` files and all `.github/**` files are deliberately excluded; contributor instructions and CI are not required for consumer generation. GitHub's two committed contributor SKILL.md files are therefore not catalog entries. No policy files or CI workflows are created by this import.
+
+Original imported files remain byte-identical. Packaging adds `IMPORT-PROVENANCE.json` at each vendor root and, where absent, upstream MIT text as `LICENSE` inside each Matt skill directory. Catalog provenance explicitly identifies those additions. Generated Spec Kit skill directories also carry a separate upstream LICENSE; rendered SKILL.md bytes are unchanged. Upstream per-skill LICENSE and CREDITS files are preserved, not replaced.
+
+`reviewed: true` means static instruction/resource inventory, generator and packaging/dependency inspection. It does **not** mean a security audit. Skills are executable instructions for a later agent: some instruct it to write configuration, install hooks, run shell commands, invoke extension hooks, call external services or create issues. Importing/staging has executed none of these skill instructions or hooks. The trusted official Python initialization path was inspected and run only inside disposable scratch projects, without extensions/presets. Runtime approvals and project policy still apply.
+
+## Official consumer generation, verified
+
+The installed pinned CLI reports that `init` uses bundled assets without downloading release templates. Its `--help` confirms `--integration`, `--integration-options`, `--script` and `--non-interactive`. Generic skills mode renders via the official `GenericIntegration._build_skill_content()` implementation: it resolves script paths, command references, arguments, skills frontmatter and hook invocation separators. This is not template renaming or a third-party conversion.
+
+Create an isolated CLI environment (Python 3.11+ and uv required); substitute an absolute scratch/tool directory of your choice for `$TOOLS`:
+
+```sh
+REPO=/absolute/path/to/agents
+TOOLS=/absolute/path/to/scratch/spec-kit-tools
+uv venv "$TOOLS"
+uv pip install --python "$TOOLS/bin/python" "$REPO/vendor/github-spec-kit"
+"$TOOLS/bin/specify" init /absolute/path/to/disposable-project \
+  --integration generic \
+  --integration-options="--commands-dir .agents/skills --skills" \
+  --script sh --non-interactive
+```
+
+This exact init option set succeeded for both the original pinned checkout installation and a wheel built from the vendored toolkit. Both returned `Project ready`; **all ten generated SKILL.md files were byte-identical** between the two installations. The generated names are:
+
+- speckit-analyze
+- speckit-checklist
+- speckit-clarify
+- speckit-constitution
+- speckit-converge
+- speckit-implement
+- speckit-plan
+- speckit-specify
+- speckit-tasks
+- speckit-taskstoissues
+
+`generated/github-spec-kit/GENERATION.json` records the command, revision, generator and output hashes. Intentional runtime `$ARGUMENTS` and hook display variables are not unresolved generator tokens. `.specify/scripts/bash` references resolve to retained official scripts; command placeholders have been rendered. A toolkit wheel is built from retained pyproject force-include resources. Third-party Python dependency versions are **not** locked by this repository; uv may need network access to obtain them. CLI source and template revision are pinned, not the entire package ecosystem.
+
+## Initialize an actual consumer project
+
+Use the same isolated CLI installed above, from the **consumer** repository (not the catalog):
+
+```sh
+"$TOOLS/bin/specify" init --here --integration generic \
+  --integration-options="--commands-dir .agents/skills --skills" \
+  --script sh --non-interactive
+```
+
+For a nonempty project, inspect existing `.specify/` and project-local skills first. `--force` explicitly permits the official CLI to merge/overwrite scaffolding; only add it after reviewing that scope. The new-project invocation above was executed; `--here` is the documented help-supported equivalent, not separately exercised here. Initialization supplies scripts, templates, memory/constitution, workflow registry and integration metadata. Generated skills may be available globally through this catalog but their commands run relative to the current project, which must contain that infrastructure. Project-local duplicate skills may shadow global copies: retain the same pin or choose one discovery source deliberately.
+
+Do **not** use the official Hermes integration for catalog maintenance: at this revision it targets `Path.home()/.hermes/skills` without named-profile awareness, and teardown can delete matching speckit skill directories. Generic mode confines generation to the consumer/scratch project. No real home profiles were initialized during this import.
+
+## Re-import with deliberate review
+
+Use clean local clones checked out at the exact pins above, and generate the disposable project with the matching installed official CLI before running:
+
+```sh
+python scripts/import_upstreams.py \
+  --matt /absolute/path/to/pinned-matt-clone \
+  --spec /absolute/path/to/pinned-spec-kit-clone \
+  --generated /absolute/path/to/disposable-project/.agents/skills \
+  --repo /absolute/path/to/agents
+python -m unittest discover -s tests -v
+```
+
+The helper copies local verified sources; it does not fetch or initialize projects, and does not activate anything. Its generated-directory input is trusted maintainer output, not an authenticated substitute for running the official generator: verify the CLI revision and compare a clean reproduction before accepting changes. It rebuilds the 48 upstream entries and four base environments, then preserves explicitly listed optional originals from `local-examples.json`; duplicate IDs and upstream-ID conflicts are rejected. Other hand-added catalog entries must be reconciled deliberately rather than assumed preserved. It does not prune old files on version changes; import a new pin into clean staging, inspect diffs and removals, then integrate. Changing `PINS` requires a fresh review, not just a successful test.
+
+Optional misc skills and experimental in-progress skills are available by adding their catalog IDs to a private environment. Check harness support first: `mattpocock-git-guardrails-claude-code` supports Claude only. There is no automatic plugin/hook activation.
