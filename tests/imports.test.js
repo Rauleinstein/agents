@@ -209,13 +209,26 @@ const realGenerated = path.join(realRepo, 'generated/github-spec-kit/generic');
 test('optional real pinned CLI reimport exactly preserves catalog, defaults, provenance and resources', { skip: !fs.existsSync(realMatt) || !fs.existsSync(realSpec) || !fs.existsSync(realGenerated) }, async t => {
   const destination = temporary(t);
   fs.copyFileSync(path.join(realRepo, 'local-examples.json'), path.join(destination, 'local-examples.json'));
+  const { digest, copyPayload } = await import(pathToFileURL(path.join(realRepo, 'agentsctl.js')));
+  const retainedSidecar = JSON.parse(fs.readFileSync(path.join(realRepo, 'local-examples.json')));
+  for (const item of retainedSidecar) {
+    const target = path.join(destination, item.path);
+    fs.mkdirSync(path.dirname(target), { recursive: true });
+    copyPayload(path.join(realRepo, item.path), target);
+  }
   const result = spawnSync(process.execPath, [importerPath, '--matt', realMatt, '--spec', realSpec, '--generated', realGenerated, '--repo', destination], { encoding: 'utf8', timeout: 120000 });
   assert.equal(result.status, 0, result.stderr);
-  assert.match(result.stdout, /Imported 52 catalog artifacts/);
+  assert.match(result.stdout, /Imported 70 catalog artifacts/);
   const catalog = JSON.parse(fs.readFileSync(path.join(destination, 'catalog.json')));
-  assert.equal(catalog.items.length, 52);
-  assert.equal(catalog.items.filter(item => item.provenance.source !== 'original').length, 48);
-  assert.deepEqual(catalog.items.slice(-4), JSON.parse(fs.readFileSync(path.join(realRepo, 'local-examples.json'))));
+  assert.equal(catalog.items.length, 70);
+  const sidecar = JSON.parse(fs.readFileSync(path.join(realRepo, 'local-examples.json')));
+  assert.equal(sidecar.length, 22);
+  assert.equal(sidecar.filter(item => item.provenance.source === 'original').length, 4);
+  assert.equal(sidecar.filter(item => item.provenance.source === 'https://github.com/DietrichGebert/ponytail').length, 6);
+  assert.equal(catalog.items.filter(item => !sidecar.some(local => local.id === item.id)).length, 48);
+  assert.equal(sidecar.filter(item => item.provenance.source === 'local-hermes-curation').length, 12);
+  assert.deepEqual(catalog.items.slice(-22), sidecar);
+  for (const item of sidecar) assert.equal(digest(path.join(destination, item.path)), digest(path.join(realRepo, item.path)), `unchanged optional payload ${item.id}`);
   const jsonPaths = ['catalog.json', 'vendor/mattpocock-skills/IMPORT-PROVENANCE.json', 'vendor/github-spec-kit/IMPORT-PROVENANCE.json', 'generated/github-spec-kit/GENERATION.json', ...['hermes', 'claude', 'codex', 'cursor'].map(h => `environments/${h}.json`)];
   for (const relative of jsonPaths) assert.deepEqual(fs.readFileSync(path.join(destination, relative)), fs.readFileSync(path.join(realRepo, relative)), `byte-identical ${relative}`);
   for (const label of ['mattpocock-skills', 'github-spec-kit']) {
@@ -224,7 +237,7 @@ test('optional real pinned CLI reimport exactly preserves catalog, defaults, pro
     for (const name of Object.keys(provenance.upstream_sha256)) assert.deepEqual(fs.readFileSync(path.join(destination, `vendor/${label}/${name}`)), fs.readFileSync(path.join(realRepo, `vendor/${label}/${name}`)), `byte-identical ${label}/${name}`);
     assert.deepEqual(fs.readFileSync(path.join(destination, `vendor/${label}/LICENSE`)), fs.readFileSync(path.join(label === 'mattpocock-skills' ? realMatt : realSpec, 'LICENSE')));
   }
-  for (const item of catalog.items.filter(item => item.provenance.source !== 'original')) {
+  for (const item of catalog.items.filter(item => !sidecar.some(local => local.id === item.id))) {
     assert.deepEqual(fs.readFileSync(path.join(destination, item.path, 'LICENSE')), fs.readFileSync(path.join(realRepo, item.path, 'LICENSE')));
     assert.deepEqual(fs.readFileSync(path.join(destination, item.path, 'SKILL.md')), fs.readFileSync(path.join(realRepo, item.path, 'SKILL.md')));
   }

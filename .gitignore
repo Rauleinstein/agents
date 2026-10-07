@@ -2,6 +2,7 @@ __pycache__/
 *.py[cod]
 .venv/
 .env*
+!vendor/ponytail/benchmarks/.env.example
 environments/*.local.json
 .agents-managed/
 .agents-sync.lock/

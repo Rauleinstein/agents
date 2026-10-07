@@ -72,5 +72,433 @@
       "maturity": "optional",
       "review_scope": "Original example instruction and staging review; not a security audit"
     }
+  },
+  {
+    "id": "ponytail",
+    "kind": "skill",
+    "name": "ponytail",
+    "path": "vendor/ponytail/skills/ponytail",
+    "harnesses": [
+      "hermes",
+      "claude",
+      "codex",
+      "cursor"
+    ],
+    "provenance": {
+      "source": "https://github.com/DietrichGebert/ponytail",
+      "revision": "552acd5efd0aeae2583a12efe39373d2f076f25e",
+      "license": "MIT",
+      "reviewed": true,
+      "original_path": "skills/ponytail/SKILL.md",
+      "maturity": "optional",
+      "review_scope": "Static canonical instruction/resource inventory and evidence packaging inspection; not a security audit",
+      "packaging_additions": [
+        "LICENSE"
+      ],
+      "runtime_limits": "Skill data only; plugin hooks, namespace invocation, configuration and auto-update semantics are not installed or verified. Benchmark claims are unverified upstream evidence, not endorsed."
+    }
+  },
+  {
+    "id": "ponytail-audit",
+    "kind": "skill",
+    "name": "ponytail-audit",
+    "path": "vendor/ponytail/skills/ponytail-audit",
+    "harnesses": [
+      "hermes",
+      "claude",
+      "codex",
+      "cursor"
+    ],
+    "provenance": {
+      "source": "https://github.com/DietrichGebert/ponytail",
+      "revision": "552acd5efd0aeae2583a12efe39373d2f076f25e",
+      "license": "MIT",
+      "reviewed": true,
+      "original_path": "skills/ponytail-audit/SKILL.md",
+      "maturity": "optional",
+      "review_scope": "Static canonical instruction/resource inventory and evidence packaging inspection; not a security audit",
+      "packaging_additions": [
+        "LICENSE"
+      ],
+      "runtime_limits": "Skill data only; plugin hooks, namespace invocation, configuration and auto-update semantics are not installed or verified. Benchmark claims are unverified upstream evidence, not endorsed."
+    }
+  },
+  {
+    "id": "ponytail-debt",
+    "kind": "skill",
+    "name": "ponytail-debt",
+    "path": "vendor/ponytail/skills/ponytail-debt",
+    "harnesses": [
+      "hermes",
+      "claude",
+      "codex",
+      "cursor"
+    ],
+    "provenance": {
+      "source": "https://github.com/DietrichGebert/ponytail",
+      "revision": "552acd5efd0aeae2583a12efe39373d2f076f25e",
+      "license": "MIT",
+      "reviewed": true,
+      "original_path": "skills/ponytail-debt/SKILL.md",
+      "maturity": "optional",
+      "review_scope": "Static canonical instruction/resource inventory and evidence packaging inspection; not a security audit",
+      "packaging_additions": [
+        "LICENSE"
+      ],
+      "runtime_limits": "Skill data only; plugin hooks, namespace invocation, configuration and auto-update semantics are not installed or verified. Benchmark claims are unverified upstream evidence, not endorsed."
+    }
+  },
+  {
+    "id": "ponytail-gain",
+    "kind": "skill",
+    "name": "ponytail-gain",
+    "path": "vendor/ponytail/skills/ponytail-gain",
+    "harnesses": [
+      "hermes",
+      "claude",
+      "codex",
+      "cursor"
+    ],
+    "provenance": {
+      "source": "https://github.com/DietrichGebert/ponytail",
+      "revision": "552acd5efd0aeae2583a12efe39373d2f076f25e",
+      "license": "MIT",
+      "reviewed": true,
+      "original_path": "skills/ponytail-gain/SKILL.md",
+      "maturity": "optional",
+      "review_scope": "Static canonical instruction/resource inventory and evidence packaging inspection; not a security audit",
+      "packaging_additions": [
+        "LICENSE",
+        "references/benchmark.md",
+        "references/upstream-README.md"
+      ],
+      "runtime_limits": "Skill data only; plugin hooks, namespace invocation, configuration and auto-update semantics are not installed or verified. Benchmark claims are unverified upstream evidence, not endorsed."
+    }
+  },
+  {
+    "id": "ponytail-help",
+    "kind": "skill",
+    "name": "ponytail-help",
+    "path": "vendor/ponytail/skills/ponytail-help",
+    "harnesses": [
+      "hermes",
+      "claude",
+      "codex",
+      "cursor"
+    ],
+    "provenance": {
+      "source": "https://github.com/DietrichGebert/ponytail",
+      "revision": "552acd5efd0aeae2583a12efe39373d2f076f25e",
+      "license": "MIT",
+      "reviewed": true,
+      "original_path": "skills/ponytail-help/SKILL.md",
+      "maturity": "optional",
+      "review_scope": "Static canonical instruction/resource inventory and evidence packaging inspection; not a security audit",
+      "packaging_additions": [
+        "LICENSE"
+      ],
+      "runtime_limits": "Skill data only; plugin hooks, namespace invocation, configuration and auto-update semantics are not installed or verified. Benchmark claims are unverified upstream evidence, not endorsed."
+    }
+  },
+  {
+    "id": "ponytail-review",
+    "kind": "skill",
+    "name": "ponytail-review",
+    "path": "vendor/ponytail/skills/ponytail-review",
+    "harnesses": [
+      "hermes",
+      "claude",
+      "codex",
+      "cursor"
+    ],
+    "provenance": {
+      "source": "https://github.com/DietrichGebert/ponytail",
+      "revision": "552acd5efd0aeae2583a12efe39373d2f076f25e",
+      "license": "MIT",
+      "reviewed": true,
+      "original_path": "skills/ponytail-review/SKILL.md",
+      "maturity": "optional",
+      "review_scope": "Static canonical instruction/resource inventory and evidence packaging inspection; not a security audit",
+      "packaging_additions": [
+        "LICENSE"
+      ],
+      "runtime_limits": "Skill data only; plugin hooks, namespace invocation, configuration and auto-update semantics are not installed or verified. Benchmark claims are unverified upstream evidence, not endorsed."
+    }
+  },
+  {
+    "id": "hermes-web-app-delivery",
+    "kind": "skill",
+    "name": "hermes-web-app-delivery",
+    "path": "skills/hermes-web-app-delivery",
+    "harnesses": [
+      "hermes",
+      "claude",
+      "codex",
+      "cursor"
+    ],
+    "provenance": {
+      "source": "local-hermes-curation",
+      "revision": "v1",
+      "license": "All rights reserved",
+      "reviewed": true,
+      "maturity": "optional",
+      "review_scope": "Independently authored portable workflow from local skill review; not a security audit",
+      "original_path": "software-development/web-app-delivery-workflows/SKILL.md",
+        "source_sha256": "eb16a697db3af0454af928c979369e126eedb6f7756e90c8d17bd8999b3b9dff",
+      "original_license": "MIT (declared in source frontmatter; not independently verified)"
+    }
+  },
+  {
+    "id": "hermes-atomic-git-delivery",
+    "kind": "skill",
+    "name": "hermes-atomic-git-delivery",
+    "path": "skills/hermes-atomic-git-delivery",
+    "harnesses": [
+      "hermes",
+      "claude",
+      "codex",
+      "cursor"
+    ],
+    "provenance": {
+      "source": "local-hermes-curation",
+      "revision": "v1",
+      "license": "All rights reserved",
+      "reviewed": true,
+      "maturity": "optional",
+      "review_scope": "Independently authored portable workflow from local skill review; not a security audit",
+      "original_path": "software-development/atomic-git-delivery/SKILL.md",
+        "source_sha256": "8de59c7170d9254bdef4c734506054168eb748fa2841e6feb3df4b380d00ad84",
+      "original_license": "MIT (declared in source frontmatter; not independently verified)"
+    }
+  },
+  {
+    "id": "hermes-expo-android-builds",
+    "kind": "skill",
+    "name": "hermes-expo-android-builds",
+    "path": "skills/hermes-expo-android-builds",
+    "harnesses": [
+      "hermes",
+      "claude",
+      "codex",
+      "cursor"
+    ],
+    "provenance": {
+      "source": "local-hermes-curation",
+      "revision": "v1",
+      "license": "All rights reserved",
+      "reviewed": true,
+      "maturity": "optional",
+      "review_scope": "Independently authored portable workflow from local skill review; not a security audit",
+      "original_path": "software-development/expo-android-builds/SKILL.md",
+        "source_sha256": "dcf281d2fa3d8d4ba8afa434d0370bda637b33cd720df577283d09aa985d2182",
+      "original_license": "MIT (declared in source frontmatter; not independently verified)"
+    }
+  },
+  {
+    "id": "hermes-auth-deployment-debugging",
+    "kind": "skill",
+    "name": "hermes-auth-deployment-debugging",
+    "path": "skills/hermes-auth-deployment-debugging",
+    "harnesses": [
+      "hermes",
+      "claude",
+      "codex",
+      "cursor"
+    ],
+    "provenance": {
+      "source": "local-hermes-curation",
+      "revision": "v1",
+      "license": "All rights reserved",
+      "reviewed": true,
+      "maturity": "optional",
+      "review_scope": "Independently authored portable workflow from local skill review; not a security audit",
+      "original_path": "software-development/auth-deployment-debugging/SKILL.md",
+        "source_sha256": "01cae8ef223fcfea4702419d22650504a43f545e49d95f7202661edcf557741e",
+      "original_license": "MIT (declared in source frontmatter; not independently verified)"
+    }
+  },
+  {
+    "id": "hermes-react-runtime-resilience",
+    "kind": "skill",
+    "name": "hermes-react-runtime-resilience",
+    "path": "skills/hermes-react-runtime-resilience",
+    "harnesses": [
+      "hermes",
+      "claude",
+      "codex",
+      "cursor"
+    ],
+    "provenance": {
+      "source": "local-hermes-curation",
+      "revision": "v1",
+      "license": "All rights reserved",
+      "reviewed": true,
+      "maturity": "optional",
+      "review_scope": "Independently authored portable workflow from local skill review; not a security audit",
+      "original_path": "software-development/react-web-app-surface-patterns/SKILL.md",
+        "source_sha256": "a1dcbe558bf3b8b56e6cfda9023ddea698ffd366da2f919e181713d2bdc96979",
+      "original_license": "MIT (declared in source frontmatter; not independently verified)"
+    }
+  },
+  {
+    "id": "hermes-safe-cli-installation",
+    "kind": "skill",
+    "name": "hermes-safe-cli-installation",
+    "path": "skills/hermes-safe-cli-installation",
+    "harnesses": [
+      "hermes",
+      "claude",
+      "codex",
+      "cursor"
+    ],
+    "provenance": {
+      "source": "local-hermes-curation",
+      "revision": "v1",
+      "license": "All rights reserved",
+      "reviewed": true,
+      "maturity": "optional",
+      "review_scope": "Independently authored portable workflow from local skill review; not a security audit",
+      "original_path": "software-development/cli-tool-installation-patterns/SKILL.md",
+        "source_sha256": "41e325ca3600fb7d09f1e47c560d32585d1f00396666516dd170b988fa501611",
+      "original_license": "MIT (declared in source frontmatter; not independently verified)"
+    }
+  },
+  {
+    "id": "hermes-godot-project-verification",
+    "kind": "skill",
+    "name": "hermes-godot-project-verification",
+    "path": "skills/hermes-godot-project-verification",
+    "harnesses": [
+      "hermes",
+      "claude",
+      "codex",
+      "cursor"
+    ],
+    "provenance": {
+      "source": "local-hermes-curation",
+      "revision": "v1",
+      "license": "All rights reserved",
+      "reviewed": true,
+      "maturity": "optional",
+      "review_scope": "Independently authored portable workflow from local skill review; not a security audit",
+      "original_path": "software-development/godot-2d-project-patterns/SKILL.md",
+        "source_sha256": "ee19fd0c90e27b1f5975b9ba0d02a77b484301fc7594d7bff5fdc5c6243fd271",
+      "original_license": "MIT (declared in source frontmatter; not independently verified)"
+    }
+  },
+  {
+    "id": "hermes-playwright-smoke-suites",
+    "kind": "skill",
+    "name": "hermes-playwright-smoke-suites",
+    "path": "skills/hermes-playwright-smoke-suites",
+    "harnesses": [
+      "hermes",
+      "claude",
+      "codex",
+      "cursor"
+    ],
+    "provenance": {
+      "source": "local-hermes-curation",
+      "revision": "v1",
+      "license": "All rights reserved",
+      "reviewed": true,
+      "maturity": "optional",
+      "review_scope": "Independently authored portable workflow from local skill review; not a security audit",
+      "original_path": "software-development/playwright-smoke-suites/SKILL.md",
+        "source_sha256": "46f7b468209cf804250def44c69fbbc28f16e07d80c3eaf5f24ea39d007c62a7",
+      "original_license": "undeclared"
+    }
+  },
+  {
+    "id": "hermes-grounded-citations",
+    "kind": "skill",
+    "name": "hermes-grounded-citations",
+    "path": "skills/hermes-grounded-citations",
+    "harnesses": [
+      "hermes",
+      "claude",
+      "codex",
+      "cursor"
+    ],
+    "provenance": {
+      "source": "local-hermes-curation",
+      "revision": "v1",
+      "license": "All rights reserved",
+      "reviewed": true,
+      "maturity": "optional",
+      "review_scope": "Independently authored portable workflow from local skill review; not a security audit",
+      "original_path": "research/grounded-citations/SKILL.md",
+        "source_sha256": "19fba3a4ceedf768af6851e094b268a66b62af750d4d0689c5d62d5d50c032b6",
+      "original_license": "MIT (declared in source frontmatter; not independently verified)"
+    }
+  },
+  {
+    "id": "hermes-image-generation",
+    "kind": "skill",
+    "name": "hermes-image-generation",
+    "path": "skills/hermes-image-generation",
+    "harnesses": [
+      "hermes",
+      "claude",
+      "codex",
+      "cursor"
+    ],
+    "provenance": {
+      "source": "local-hermes-curation",
+      "revision": "v1",
+      "license": "All rights reserved",
+      "reviewed": true,
+      "maturity": "optional",
+      "review_scope": "Independently authored portable workflow from local skill review; not a security audit",
+      "original_path": "openclaw-imports/nano-banana/SKILL.md",
+        "source_sha256": "b04d75f02d1acee5fa59e0a7e861172f5d873e4a1008c64835780bc83618ae25",
+      "original_license": "undeclared"
+    }
+  },
+  {
+    "id": "hermes-frontend-design",
+    "kind": "skill",
+    "name": "hermes-frontend-design",
+    "path": "skills/hermes-frontend-design",
+    "harnesses": [
+      "hermes",
+      "claude",
+      "codex",
+      "cursor"
+    ],
+    "provenance": {
+      "source": "local-hermes-curation",
+      "revision": "v1",
+      "license": "All rights reserved",
+      "reviewed": true,
+      "maturity": "optional",
+      "review_scope": "Independently authored portable workflow from local skill review; not a security audit",
+      "original_path": "openclaw-imports/frontend-design/SKILL.md",
+        "source_sha256": "5839adba84d505d1a144d5c6393be604c2d31be967d5c7e7f59d1990f8d1e058",
+      "original_license": "undeclared"
+    }
+  },
+  {
+    "id": "hermes-video-artifact-verification",
+    "kind": "skill",
+    "name": "hermes-video-artifact-verification",
+    "path": "skills/hermes-video-artifact-verification",
+    "harnesses": [
+      "hermes",
+      "claude",
+      "codex",
+      "cursor"
+    ],
+    "provenance": {
+      "source": "local-hermes-curation",
+      "revision": "v1",
+      "license": "All rights reserved",
+      "reviewed": true,
+      "maturity": "optional",
+      "review_scope": "Independently authored portable workflow from local skill review; not a security audit",
+      "original_path": "creative/remotion-video-production/SKILL.md",
+        "source_sha256": "049bca69cf30c4d91be57cb2408f83c094cb8c681851b25f030b554714598dce",
+      "original_license": "MIT (declared in source frontmatter; not independently verified)"
+    }
   }
 ]

@@ -39,7 +39,20 @@ Bundled harness configurations resolve relative to the installed package, not th
 | GitHub Spec Kit v1.1.1.dev0 | 10 official generated consumer workflow skills | 10 | Contributor skills are not the consumer workflow |
 | Total upstream | 48 | 37 | All four environments select the same 37 |
 
-Four optional originals bring the catalog to **52 entries**: `verify-before-reporting`, `claude-reviewer`, `cursor-reviewer`, and `example-bundle` (an inert plugin fixture, not a runnable plugin). Their entries persist through re-import via `local-examples.json`; they are not selected by default.
+Six optional [Ponytail skills](https://github.com/DietrichGebert/ponytail), pinned at `552acd5efd0aeae2583a12efe39373d2f076f25e`, four optional originals and twelve independently authored [Hermes-inspired workflows](docs/hermes-curation.md) bring the catalog to **70 entries** (67 skills, two agents, one inert plugin). The originals are `verify-before-reporting`, `claude-reviewer`, `cursor-reviewer`, and `example-bundle` (an inert plugin fixture, not a runnable plugin). `local-examples.json` preserves all 22 optional records, including the external Ponytail artifacts and local curations; its filename does not imply they are all originals. None are selected by default; all four environments remain byte-identical with 37 selections.
+
+The Hermes-inspired entries cover web delivery, atomic Git delivery, Expo Android builds, auth diagnostics, React runtime resilience, safe CLI installation, Godot verification, Playwright smoke suites, grounded citations, image generation, frontend design and video verification. They are portable procedural text, not private active-profile snapshots or official Hermes bundles. Each carries explicit local-review attribution and an All rights reserved notice; source license declarations do not grant redistribution rights for private content. Static review and verified sandbox staging do not prove consumer runtime execution.
+
+| Optional Ponytail skill | Purpose |
+|---|---|
+| `ponytail` | Minimal-code/YAGNI guidance with lite/full/ultra levels |
+| `ponytail-audit` | Repo-wide over-engineering report |
+| `ponytail-debt` | Ledger of deliberate `ponytail:` shortcuts |
+| `ponytail-gain` | Display upstream benchmark scoreboard, not live repo savings |
+| `ponytail-help` | Upstream command reference |
+| `ponytail-review` | Diff-focused complexity review, not correctness/security review |
+
+Only canonical `skills/<name>/SKILL.md` files are cataloged, not duplicate OpenClaw adapters or the benchmark Caveman control. Original bytes are unchanged, MIT licenses are included, and `ponytail-gain/references/` includes separately marked benchmark/README snapshots. The complete benchmark source is retained as inert provenance data. Upstream benchmark claims are unverified and **not endorsed**. See [extraction scope and limits](docs/upstreams.md#optional-ponytail-extraction).
 
 Matt IDs use `mattpocock-<name>`, while directories/frontmatter preserve upstream names. Spec Kit IDs and directories use `speckit-<command>`. Original resources, metadata, credits and MIT notices are retained; each imported skill carries its LICENSE.
 
@@ -81,6 +94,8 @@ Matt's native `disable-model-invocation`, slash commands and orchestration instr
 **Spec Kit requires project-local `.specify/` infrastructure.** Installing its ten skills does not initialize a project. Our installer/importer/tests need only Node; the separately vendored official Spec Kit CLI still has its upstream Python dependencies. They are retained as third-party source for provenance and optional regeneration, not used by `agentsctl`. See the documented official setup in [docs/upstreams.md](docs/upstreams.md).
 
 Native Claude agent files conventionally use `~/.claude/agents`. Native Cursor discovery at the requested `~/.agents/agents` path remains unverified; do not silently create `.cursor` copies or change settings. A read-only prompt does not enforce tool permissions. Plugin activation, hooks, cloud sync, dependency installation and service restarts are always separate actions.
+
+Ponytail's unchanged help describes plugin namespaces, session hooks, config resolution and auto-update. Copying these skills supplies **none of that plugin runtime** and does not activate a mode. Host-specific invocation/frontmatter behavior is unverified. The main prompt asks for persistent activation and minimal testing; this extraction does not adopt those rules as catalog policy or replace acceptance, security or verification requirements. Add individual IDs to a private environment only after reviewing the prompt and host support.
 
 ## Verify locally
 
